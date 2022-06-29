@@ -1,1 +1,267 @@
-// app global css in SCSS form
+
+h1,h2,h3,h4,h5,h6 {
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  line-height: normal;
+}
+@media (min-width: 600px) {
+
+  .q-layout-padding {
+      padding: 28px;
+  }
+
+}
+.input-label {
+  font-size: 14px;
+  color: rgb(105, 105, 105);
+  margin: .5rem 0;
+}
+.box-shadow {
+  box-shadow: 0 10px 20px #0000000d;
+}
+.card-xs {
+  width:100%;
+  max-width: 300px;
+}
+.card-sm {
+  width:100%;
+  max-width: 400px;
+}
+.card-md {
+  width:100%;
+  max-width: 460px;
+}
+.card-lg {
+  width:100%;
+  max-width: 560px;
+}
+.card-xl {
+  width:100%;
+  max-width: 640px;
+}
+.card-title {
+  padding-bottom: .8rem;
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin:0;
+  }
+  .desc {
+    padding-top:.5rem;
+    color: grey;
+  }
+
+}
+.card-header {
+  padding: 1rem 1rem .5rem;
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin:0;
+  }
+  .desc {
+    padding-top:.5rem;
+    color: grey;
+  }
+}
+
+a {
+  color: $primary;
+}
+.text-xs {
+  font-size: .84rem;
+}
+.text-sm {
+  font-size: 1rem;
+}
+.text-md {
+  font-size: 1.2rem;
+}
+.text-lg {
+  font-size: 1.4rem;
+}
+
+.title {
+  font-size: 2rem;
+}
+.block-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: .5rem;
+  margin-top: .5rem;
+}
+.sticky-top {
+  position: sticky;
+  top:0;
+}
+table.table.striped {
+  width: 100%;
+  border-spacing: 0px;
+  thead > tr{
+    padding: 12px;
+    text-align: left;
+    background-color: #5d5d5d;
+    color: white;
+    &:last-child {
+      text-align: right;
+    }
+    > th, > td {
+      padding: 12px;
+      text-align: left;
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+ tbody > tr {
+    &:nth-child(even){background-color: #f5f5f5;}
+    &:hover {background-color: rgb(238, 238, 238);}
+    > th, > td {
+      padding: 12px;
+      text-align: left;
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
+}
+.overflow-x-auto {
+  overflow-x: auto;
+}
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+.td-md {
+  min-width: 200px;
+}
+.statuses {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  &.active .bullet {
+    background-color: rgb(2, 182, 2);
+  }
+  .bullet {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-right: 4px;
+    background-color: rgb(44, 44, 44);
+  }
+}
+.form-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // margin-bottom: 40px;
+  @media(max-width:800px) {
+    flex-direction: column;
+    .card-sm {
+      width: 100%;
+      max-width:800px;
+    }
+    // margin-bottom: 120px;
+  }
+}
+.submit-block {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+  button {
+    margin-left: .6rem;
+  }
+  @media(max-width:800px) {
+    background-color: #fff;
+    justify-content: center;
+    flex-direction: column;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width:100%;
+    padding: .5rem;
+    z-index: 100;
+    a {
+      order:2;
+    }
+    button {
+      margin-left: 0;
+      margin-bottom: .4rem;
+      order: 1
+    }
+  }
+}
+.card-box {
+  padding: 1.5rem;
+  background-color: #ffffff;
+  width:100%;
+  box-shadow: 0px 12px 19px -10px #3838380d;
+  margin-top:1rem;
+}
+.card-column {
+  background-color: #ffffff;
+  width:100%;
+  box-shadow: 0px 12px 19px -10px #3838380d;
+  margin-top:1rem;
+}
+.block-container {
+  min-width: 400px;
+}
+.main-menu {
+   .q-list.q-list--dark .q-item.q-link {
+    background-color: rgb(110, 110, 110);
+  }
+  .q-list.q-list--dark .q-item.q-router-link--active {
+
+    background-color: rgb(102, 102, 102)!important;
+
+    color: white;
+  }
+
+}
+.svg-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+  position: relative;
+}
+.product-variation {
+  position: relative;
+  &__tick {
+
+    width: 1.5rem;
+    height: 1.5rem;
+    position: absolute;
+    overflow: hidden;
+    right: 0;
+    bottom: 0;
+
+    > .icon-tick-bold {
+      position: absolute;
+      right: .09rem;
+      bottom: 0.1rem;
+      color: red;
+      font-size: 11px;
+    }
+
+    &:before {
+      border: 1.4rem solid transparent;
+      border-bottom: 1.4rem solid var(--q-color-accent, #ffe70b);
+      content: "";
+      position: absolute;
+      right: -1.55em;
+      bottom: 0;
+    }
+  }
+}
+.z-100 {
+  z-index: 100;
+}
+.img-preview {
+  width: 100%;
+  height:auto;
+}

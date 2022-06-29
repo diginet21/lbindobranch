@@ -61,6 +61,14 @@ module.exports = configure(function (ctx) {
       // showProgress: false,
       // gzip: true,
       // analyze: true,
+      env: {
+        MAIN_API: ctx.dev
+          ? 'http://localhost:8000/api/backoffice/'
+          : 'http://lb.diginet.website/api/backoffice/',
+        BASE_API: ctx.dev
+          ? 'http://localhost:8000/api/'
+          : 'http://lb.diginet.website/api/'
+      },
 
       // Options below are automatically set depending on the env, set them if you want to override
       // extractCSS: false,

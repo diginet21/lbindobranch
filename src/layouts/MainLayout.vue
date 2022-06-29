@@ -1,44 +1,119 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="lHh LpR lFf" class="bg-grey-1">
+     <q-header class="box-shadow bg-white text-dark"  reveal>
       <q-toolbar>
         <q-btn
           flat
           dense
           round
-          icon="menu"
+          :icon="leftDrawerOpen? 'menu_open' :'menu'"
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
 
         <q-toolbar-title>
-          Quasar App
+          <img :src="sites.logo_src" v-if="sites && sites.logo" height="30">
+          <span v-else>Lautan Berlian</span>
         </q-toolbar-title>
+        <q-space></q-space>
+        <q-btn-dropdown dropdown round flat icon="account_circle">
+          <q-list>
+            <q-item clickable v-close-popup @click="$router.push({name: 'Account'})">
+              <q-item-section avatar>
+                <q-icon name="manage_accounts"></q-icon>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Setting Akun</q-item-label>
+              </q-item-section>
+            </q-item>
 
-        <div>Quasar v{{ $q.version }}</div>
+            <q-item clickable v-close-popup @click="logout">
+              <q-item-section avatar>
+                <q-icon name="logout"></q-icon>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Keluar</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-toolbar>
     </q-header>
 
     <q-drawer
+      bordered
       v-model="leftDrawerOpen"
       show-if-above
-      bordered
-    >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
+      :width="280"
+      :breakpoint="800"
+      :dark="drawerIsDark" 
+      >
+        <q-scroll-area style="height: 100%;">
+          <!-- <q-img class="relative" src="~assets/lautan-berlian.jpg" :ratio="9/6">
+            <div class="absolute-bottom bg-transparent">
+              <q-avatar size="56px" class="q-mb-sm">
+                <img src="~assets/boy-avatar.png">
+              </q-avatar>
+              <div class="text-weight-bold">admin</div>
+              <div>admin@example.com</div>
+            </div>
+          </q-img> -->
+          <!-- <q-list class="text-center bg-white" separator>
+            <q-item>
+              <img :src="sites.logo_src" v-if="sites && sites.logo" style="width:90%;">
+              <span v-else>Lautan Berlian</span>
+            </q-item>
+          </q-list> -->
+           <!-- <q-separator spaced /> -->
+          <q-list :dark="drawerIsDark" class="q-pb-xl">
+            <q-item class="q-pl-none">
+              <q-item-section>
+                <q-item-label header>Menu Navigasi</q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-toggle v-model="drawerIsDark" left-label label="Dark" size="sm" color="blue"></q-toggle>
+              </q-item-section>
+            </q-item>
+            <template v-for="menu in expansionMenu" :key="menu.label">
+            <q-item v-if="!menu.childs" clickable :to="{ name: menu.pathName }">
+              <q-item-section avatar>
+                  <q-icon :name="menu.icon"/>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ menu.label }}</q-item-label>
+                  <q-item-label caption>{{ menu.desc }}</q-item-label>
+                </q-item-section>
+            </q-item>
+            <q-expansion-item  
+              v-else
+              :dark="drawerIsDark"
+              class="main-menu" 
+              :group="menu.group"
+              :label="menu.label"
+              :caption="menu.desc"
+              :icon="menu.icon"
+              expand-separator
+              >
+              <q-list separator dark>
+                <q-item clickable v-ripple v-for="(menuItem, idx) in menu.childs" :key="idx" :to="{ name: menuItem.pathName }" class="q-px-lg q-py-sm"> 
+                  <q-item-section side>
+                    <q-icon :name="menuItem.icon" size="18px"/>
+                  </q-item-section>
 
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
+                  <q-item-section>
+                    <q-item-label>{{ menuItem.label }}</q-item-label>
+                  </q-item-section>
+                   <q-item-section side v-if="menuItem.count">
+                    <q-badge v-if="menuItem.count.value > 0" color="amber-9"> {{ menuItem.count }}</q-badge>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+              </q-expansion-item>
+            </template>
 
+          </q-list>
+        </q-scroll-area>
+      </q-drawer>
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -46,71 +121,93 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
 
-const linksList = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
-
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'MainLayout',
 
-  components: {
-    EssentialLink
-  },
-
   setup () {
-    const leftDrawerOpen = ref(false)
+
+    const store = useStore()
+    const sites = computed(() => store.state.setting.site_settings)
+    const leadCount = computed(() => store.state.lead.new_lead_count)
+
+    const leftDrawerOpen = computed({
+      get: () => store.state.drawer,
+      set: (val) => store.commit('SET_DRAWER', val)
+    })
+
+    const isDark = ref(true)
+
+    const drawerIsDark = computed({
+      get() {
+        return isDark.value
+      },
+      set(val) {
+        isDark.value = val
+        localStorage.setItem('drawer_isdark', val)
+      }
+    })
+
+    const logout = () => {
+      store.dispatch('user/logout')
+    }
+    if(!sites.value) {
+      store.dispatch('setting/getData')
+    }
+
+    onMounted(() => {
+      if(localStorage.getItem('drawer_isdark')) {
+        isDark.value = localStorage.getItem('drawer_isdark') == 'true' ? true : false
+      }
+    })
 
     return {
-      essentialLinks: linksList,
+      drawerIsDark,
+      sites,
+      logout,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      },
+      isLogin: computed(() => store.state.user.isLogin),
+
+      expansionMenu : [
+        { pathName: 'Dashboard', label: 'Dashboard', icon: 'other_houses', desc: 'Halaman dashboard'},
+        { label: 'Vehicles', group: 'menu', icon: 'directions_car', desc: 'Kelola Kendaraan', childs: 
+          [
+            // { icon: "view_list", pathName: 'Vehicles', label: 'List'},
+            // { icon: "add_circle", pathName: 'VehicleCreate', label: 'Add'},
+          ]
+        },
+        { label: 'Spareparts', group: 'menu', icon: 'space_dashboard', desc: 'Kelola produk sparepart', childs: 
+          [
+            // { icon: "view_list", pathName: 'PartIndex', label: 'List'},
+            // { icon: "add_circle", pathName: 'PartCreate', label: 'Add'},
+          ]
+        },
+         { label: 'Prio Weekly', group: 'menu', icon: 'wysiwyg', desc: 'Kelola Prioweekly', childs: 
+          [
+            { icon:"view_list", pathName: 'PostIndex', label: 'List'},
+            { icon:"add_circle", pathName: 'PostCreate', label: 'Add'},
+            { icon:"category", pathName: 'PostCategoryIndex', label: 'Category'},
+          ]
+        },
+        
+        { label: 'Leads', group: 'menu', icon: 'leaderboard', desc: 'Kelola Point Rewards', childs: 
+          [
+            { icon: "view_list", pathName: 'LeadIndex', label: 'List', count: leadCount},
+            { icon: "view_list", pathName: 'LeadStatus', label: 'Status'},
+          ]
+        },
+
+      ],
+      menu2: [
+        { path: '/auth/register', label: 'Register', icon: 'logout', desc: 'Register'},
+        { path: '/auth/login', label: 'Login', icon: 'login', desc: 'Login'},
+      ]
     }
   }
 })
