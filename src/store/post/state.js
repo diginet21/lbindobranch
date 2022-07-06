@@ -1,5 +1,6 @@
 export default function () {
   return {
-    posts: []
+    posts: [],
+    post_categories: []
   }
 }

@@ -22,7 +22,7 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-      'axios',
+      'axios', 'helpers',
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -63,8 +63,8 @@ module.exports = configure(function (ctx) {
       // analyze: true,
       env: {
         MAIN_API: ctx.dev
-          ? 'http://localhost:8000/api/backoffice/'
-          : 'http://lb.diginet.website/api/backoffice/',
+          ? 'http://localhost:8000/api/branch/'
+          : 'http://lb.diginet.website/api/branch/',
         BASE_API: ctx.dev
           ? 'http://localhost:8000/api/'
           : 'http://lb.diginet.website/api/'
@@ -105,7 +105,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Dialog', 'Notify']
     },
 
     // animations: 'all', // --- includes all animations

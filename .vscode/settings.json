@@ -3,5 +3,25 @@
   "vetur.format.enable": false,
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   
-  "vetur.experimental.templateInterpolationService": true
+  "vetur.experimental.templateInterpolationService": true,
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#9d9e81",
+    "activityBar.activeBorder": "#b7e5e7",
+    "activityBar.background": "#9d9e81",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#b7e5e7",
+    "activityBarBadge.foreground": "#15202b",
+    "sash.hoverBorder": "#9d9e81",
+    "statusBar.background": "#848567",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#676851",
+    "statusBarItem.remoteBackground": "#848567",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#848567",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#84856799",
+    "titleBar.inactiveForeground": "#15202b99"
+  },
+  "peacock.color": "#848567"
 }

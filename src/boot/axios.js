@@ -68,7 +68,6 @@ export default boot(({ app, store }) => {
   mainApi.interceptors.response.use(response => {
     return response
   }, error => {
-    console.log('from boot');
   
     if (error.response) {
 
@@ -105,7 +104,7 @@ export default boot(({ app, store }) => {
 
 var Api = () => {
 
-  const token = Cookies.get('__token')
+  const token = Cookies.get('__btoken')
 
   if(token) {
     mainApi.defaults.headers.common['Authorization'] = `Bearer ${token}`
@@ -115,7 +114,7 @@ var Api = () => {
 }
 var BaseApi = () => {
 
-  const token = Cookies.get('__token')
+  const token = Cookies.get('__btoken')
 
   if(token) {
     baseApi.defaults.headers.common['Authorization'] = `Bearer ${token}`

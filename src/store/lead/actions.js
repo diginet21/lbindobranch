@@ -17,6 +17,13 @@ export function getAll ({commit}) {
      }
    })
 }
+export function getStatus ({commit}) {
+   Api().get('/lead-status').then(response => {
+     if(response.status == 200) {
+       commit('SET_LEAD_STATUS', response.data.results)
+     }
+   })
+}
 export function getNewLeadCount ({commit}) {
    Api().get('/lead/getNewLeadCount').then(response => {
      if(response.status == 200) {

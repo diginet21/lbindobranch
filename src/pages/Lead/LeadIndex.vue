@@ -8,11 +8,11 @@ const store = useStore()
 // store.commit('SET_DRAWER', true)
 
 const leads = computed(() => store.state.lead.leads)
-const statuses = computed(() => store.state.leadStatus.lead_status)
+const statuses = computed(() => store.state.lead.lead_status)
 
 onBeforeMount(() => {
   if(!statuses.value.length) {
-    store.dispatch('leadStatus/getAll');
+    store.dispatch('lead/getStatus');
   }
   store.dispatch('lead/getAll');
 })
@@ -37,7 +37,7 @@ const selectLead = (lead) => {
   leadInfoModal.value = true
 }
 
-const title = 'Leads'
+const title = ref('Leads')
 
 const form = reactive({
   id: '',
@@ -111,7 +111,7 @@ const submit = () => {
               <td>{{ ind+1 }}</td>
               <td>{{ item.customer_name }}</td>
               <td>{{ item.customer_phone }}</td>
-              <td>{{ item.lead_type }}</td>
+              <td>{{ item.lead_type }}</td> 
               <td>
                 <q-badge color="teal">{{ item.status? item.status.label : 'New' }}</q-badge>
               </td>
@@ -124,7 +124,7 @@ const submit = () => {
             </tr>
             <tr v-if="!leads.length">
               <td colspan="6" >
-                <div class="text-center">Tidak ada data</div></td>
+                <div class="text-center q-pa-xs">No data found</div></td>
             </tr>
           </tbody>
         </table>

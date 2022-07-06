@@ -107,7 +107,7 @@ const submitItem = () => {
             </tr>
              <tr v-if="!statuses.length">
               <td colspan="3" >
-                <div class="text-center">Tidak ada data</div></td>
+                <div class="text-center">No data found</div></td>
             </tr>
           </tbody>
         </table>

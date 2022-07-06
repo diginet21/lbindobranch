@@ -4,11 +4,11 @@ import { useStore } from 'vuex'
 
 const store = useStore()
 
-const categoryOptions = computed(() => store.getters['postCategory/getPostCategoryOptions'])
+const categoryOptions = computed(() => store.getters['post/getCategoryOptions'])
 
 onMounted(() => {
-  if(!categoryOptions.value.length) {
-    store.dispatch('postCategory/getPostCategories')
+  if(categoryOptions.value.length < 2) {
+    store.dispatch('post/getPostCategories')
   }
 })
 

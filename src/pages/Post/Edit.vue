@@ -6,9 +6,16 @@ import { useRoute } from 'vue-router'
 const store = useStore()
 const route = useRoute()
 
-const categoryOptions = computed(() => store.getters['postCategory/getPostCategoryOptions'])
+const categoryOptions = computed(() => store.getters['post/getCategoryOptions'])
 
 const loading = computed(() => store.state.loading)
+
+onMounted(() => {
+ if(categoryOptions.value.length < 2) {
+    store.dispatch('post/getPostCategories')
+  }
+})
+
 
 const deleteItem = (id) => {
   console.log(id);

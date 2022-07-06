@@ -97,7 +97,7 @@
               <q-list separator dark>
                 <q-item clickable v-ripple v-for="(menuItem, idx) in menu.childs" :key="idx" :to="{ name: menuItem.pathName }" class="q-px-lg q-py-sm"> 
                   <q-item-section side>
-                    <q-icon :name="menuItem.icon" size="18px"/>
+                    <q-icon name="radio_button_unchecked" size="18px"/>
                   </q-item-section>
 
                   <q-item-section>
@@ -131,7 +131,7 @@ export default defineComponent({
   setup () {
 
     const store = useStore()
-    const sites = computed(() => store.state.setting.site_settings)
+    const sites = computed(() => store.state.site_setting)
     const leadCount = computed(() => store.state.lead.new_lead_count)
 
     const leftDrawerOpen = computed({
@@ -155,7 +155,7 @@ export default defineComponent({
       store.dispatch('user/logout')
     }
     if(!sites.value) {
-      store.dispatch('setting/getData')
+      store.dispatch('getSite')
     }
 
     onMounted(() => {
@@ -175,33 +175,14 @@ export default defineComponent({
       isLogin: computed(() => store.state.user.isLogin),
 
       expansionMenu : [
-        { pathName: 'Dashboard', label: 'Dashboard', icon: 'other_houses', desc: 'Halaman dashboard'},
-        { label: 'Vehicles', group: 'menu', icon: 'directions_car', desc: 'Kelola Kendaraan', childs: 
-          [
-            // { icon: "view_list", pathName: 'Vehicles', label: 'List'},
-            // { icon: "add_circle", pathName: 'VehicleCreate', label: 'Add'},
-          ]
-        },
-        { label: 'Spareparts', group: 'menu', icon: 'space_dashboard', desc: 'Kelola produk sparepart', childs: 
-          [
-            // { icon: "view_list", pathName: 'PartIndex', label: 'List'},
-            // { icon: "add_circle", pathName: 'PartCreate', label: 'Add'},
-          ]
-        },
-         { label: 'Prio Weekly', group: 'menu', icon: 'wysiwyg', desc: 'Kelola Prioweekly', childs: 
-          [
-            { icon:"view_list", pathName: 'PostIndex', label: 'List'},
-            { icon:"add_circle", pathName: 'PostCreate', label: 'Add'},
-            { icon:"category", pathName: 'PostCategoryIndex', label: 'Category'},
-          ]
-        },
+        { pathName: 'Dashboard', label: 'Dashboard', icon: 'other_houses', desc: 'Dashboard'},
+        { label: 'Vehicles', group: 'menu', icon: 'directions_car', desc: 'Manage Vehicle', pathName: 'Vehicles' },
+        { label: 'Spareparts', group: 'menu', icon: 'space_dashboard', desc: 'Manage Sparepart',  pathName: 'PartIndex'},
+        { label: 'Prio Weekly', group: 'menu', icon: 'wysiwyg', desc: 'Manage Prioweekly', pathName: 'PostIndex', },
         
-        { label: 'Leads', group: 'menu', icon: 'leaderboard', desc: 'Kelola Point Rewards', childs: 
-          [
-            { icon: "view_list", pathName: 'LeadIndex', label: 'List', count: leadCount},
-            { icon: "view_list", pathName: 'LeadStatus', label: 'Status'},
-          ]
-        },
+        { label: 'Events', icon: 'event', desc: 'Manage Events', pathName: 'EventIndex'},
+        { label: 'Leads', icon: 'leaderboard', desc: 'Manage Leads', pathName: 'LeadIndex' },
+        { label: 'Order', icon: 'event', desc: 'Manage Order', pathName: 'OrderIndex'},
 
       ],
       menu2: [

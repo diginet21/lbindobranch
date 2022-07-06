@@ -8,10 +8,14 @@ const store = useStore()
 // store.commit('SET_DRAWER', true)
 
 const posts = computed(() => store.state.post.posts)
+const categories = computed(() => store.state.post.post_categories)
 
 onMounted(() => {
   if(!posts.value.length) {
     store.dispatch('post/getPosts');
+  }
+  if(!categories.value.length) {
+    store.dispatch('post/getPostCategories');
   }
 })
 const deleteItem = (item) => {
@@ -59,7 +63,7 @@ const deleteItem = (item) => {
               <td>
                 <q-img v-if="post.asset" :src="post.asset.src" :ratio="9/6" width="70px"></q-img>
               </td>
-              <td>{{ post.title }}</td>
+              <td>{{ post.title }}</td> 
               <td>
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(post)"></q-btn>
@@ -69,7 +73,7 @@ const deleteItem = (item) => {
             </tr>
              <tr v-if="!posts.length">
               <td colspan="4" >
-                <div class="text-center">Tidak ada data</div></td>
+                <div class="text-center q-pa-xs">No data found</div></td>
             </tr>
           </tbody>
         </table>

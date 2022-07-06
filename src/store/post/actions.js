@@ -7,6 +7,13 @@ export function getPosts ({ commit }) {
     }
   })
 }
+export function getPostCategories ({ commit }) {
+  Api().get('/post-categories').then(response => {
+    if(response.status == 200) {
+      commit('SET_POST_CATEGORIES', response.data)
+    }
+  })
+}
 export function getById ({ }, id) {
   return Api().get('/posts/' + id)
 }

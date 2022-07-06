@@ -1,5 +1,6 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
+import { BaseApi  } from 'boot/axios';
 
 import createPersistedState from "vuex-persistedstate";
 
@@ -9,9 +10,12 @@ const dataState = createPersistedState({
 })
 
 import user from './user'
-import setting from './site-setting'
 import lead from './lead';
 import post from './post';
+import event from './event'
+import part from './part'
+import vehicle from './vehicle'
+import order from './order'
 
 /*
  * If not building with SSR mode, you can
@@ -27,7 +31,17 @@ export default store(function (/* { ssrContext } */) {
     state: {
       errors: null,
       loading: false,
-      drawer: true
+      drawer: true,
+      site_setting: null
+    },
+    actions: {
+      getSite: ({ commit }) => {
+        BaseApi().get('sites-setting').then((response) => {
+          if(response.status == 200) {
+            commit('SET_SETTING', response.data.results)
+          }
+         })
+      }
     },
     mutations: {
       SET_ERROR: (state, payload) => {
@@ -44,13 +58,19 @@ export default store(function (/* { ssrContext } */) {
       },
       TOGGLE_DRAWER: (state) => {
         state.drawer = !state.drawer
+      },
+      SET_SETTING: ( state, payload ) => {
+        state.site_setting = payload
       }
     },
     modules: {
       user,
-      setting,
       lead,
-      post
+      post,
+      event,
+      part,
+      vehicle,
+      order
     },
     plugins: [dataState],
 
