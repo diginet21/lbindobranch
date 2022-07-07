@@ -7,14 +7,14 @@ const store = useStore()
 
 // store.commit('SET_DRAWER', true)
 
-const parts = computed(() => store.state.part.parts)
-const partsAll = computed(() => store.state.part.parts_all)
+const main_data = computed(() => store.state.part.main_data)
+const partsMaster = computed(() => store.state.part.parts_master)
 
 onMounted(() => {
-  if(!parts.value.length) {
-    store.dispatch('part/getParts');
+  if(!main_data.value.data.length) {
+    store.dispatch('part/getIndex');
   }
-  if(!partsAll.value.length) {
+  if(!partsMaster.value.length) {
     store.dispatch('part/getAll');
   }
 })
@@ -33,7 +33,11 @@ const deleteItem = (item) => {
   })
 
 }
+const loading = computed(() => store.state.loading)
 
+const paginateData = () => {
+  store.dispatch('part/paginateData', { take: main_data.value.limit, skip: main_data.value.data.length})
+}
 </script>
 
 <template>
@@ -65,7 +69,7 @@ const deleteItem = (item) => {
           </tr>
           </thead>
           <tbody>
-            <tr v-for="(part, ind) in parts" :key="part.id">
+            <tr v-for="(part, ind) in main_data.data" :key="part.id">
               <td>{{ ind+1 }}</td>
               <td>
                 <q-img v-if="part.assets.length" :src="part.assets[0].src" :ratio="1" width="60px" fit="contain"></q-img>
@@ -76,17 +80,20 @@ const deleteItem = (item) => {
               <td>
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(part)"></q-btn>
-                  <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'PartEdit', params: { part: part.id }}"></q-btn>
+                  <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'PartEdit', params: { id: part.id }}"></q-btn>
                 </div>
               </td>
             </tr>
-             <tr v-if="!parts.length">
+            <tr v-if="!main_data.available">
               <td colspan="6" >
                 <div class="text-center q-pa-xs">No data found</div></td>
             </tr>
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="q-pa-md text-center" v-if="main_data.count > main_data.data.length">
+      <q-btn :loading="loading" label="Loadmore.." outline size="md" color="primary" no-caps @click="paginateData"></q-btn>
     </div>
   </q-page>
 </template>

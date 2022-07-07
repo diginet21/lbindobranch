@@ -16,6 +16,8 @@ import event from './event'
 import part from './part'
 import vehicle from './vehicle'
 import order from './order'
+import banner from './banner'
+import layanan from './layanan'
 
 /*
  * If not building with SSR mode, you can
@@ -70,7 +72,9 @@ export default store(function (/* { ssrContext } */) {
       event,
       part,
       vehicle,
-      order
+      order,
+      banner,
+      layanan
     },
     plugins: [dataState],
 

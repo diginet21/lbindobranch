@@ -5,12 +5,10 @@ import { Dialog } from 'quasar'
 
 const store = useStore()
 
-// store.commit('SET_DRAWER', true)
-
-const orders = computed(() => store.state.order.orders)
+const main_data = computed(() => store.state.order.main_data)
 
 onMounted(() => {
-  if(!orders.value.length) {
+  if(!main_data.value.data.length) {
     store.dispatch('order/getOrders');
   }
 })
@@ -24,6 +22,12 @@ const deleteItem = (item) => {
     store.dispatch('order/destroy', item.id)
   })
 
+}
+
+const loading = computed(() => store.state.loading)
+
+const paginateData = () => {
+  store.dispatch('order/paginateData', { take: main_data.value.limit, skip: main_data.value.data.length})
 }
 
 </script>
@@ -40,7 +44,7 @@ const deleteItem = (item) => {
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
-        <q-breadcrumbs-el label="Parts" />
+        <q-breadcrumbs-el label="Order" />
       </q-breadcrumbs>
     </div>
      <div class="card-column">
@@ -57,7 +61,7 @@ const deleteItem = (item) => {
           </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in orders.data" :key="index">
+            <tr v-for="(item, index) in main_data.data" :key="index">
               <td>{{ item.invoice_id }}</td>
               <td>
                 <div>{{ item.customer_name }}</div>
@@ -74,7 +78,7 @@ const deleteItem = (item) => {
                 </div>
               </td>
             </tr>
-             <tr v-if="!orders.data.length">
+             <tr v-if="!main_data.available">
               <td colspan="6" >
                 <div class="text-center q-pa-xs">No data found</div></td>
             </tr>
@@ -82,5 +86,8 @@ const deleteItem = (item) => {
         </table>
       </div>
     </div>
+      <div class="q-pa-md text-center" v-if="main_data.count > main_data.data.length">
+        <q-btn :loading="loading" label="Loadmore.." outline size="md" color="primary" no-caps @click="paginateData"></q-btn>
+      </div>
   </q-page>
 </template>

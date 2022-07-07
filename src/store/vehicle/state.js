@@ -1,6 +1,13 @@
 export default function () {
   return {
-    vehicles: [],
+    main_data: {
+      data: [],
+      count: 0,
+      limit: 0,
+      skip: 0,
+      canPaginate: false,
+      available: true
+    },
     vehicle_master: []
   }
 }

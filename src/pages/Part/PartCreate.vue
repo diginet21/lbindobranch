@@ -5,12 +5,17 @@ import { useStore } from 'vuex'
 const store = useStore()
 
 const loading = computed(() => store.state.loading)
-// const partCategories = computed(() => store.getters['part/getCategoryOptions'])
 const partAllOptions = computed(() => store.getters['part/getAllPartOptions'])
 
+const main_data = computed(() => store.state.part.main_data)
+const partsMaster = computed(() => store.state.part.parts_master)
+
 onMounted(() => {
-   if(partAllOptions.value.length < 2) {
-    store.dispatch('part/getAll')
+  if(!main_data.value.data.length) {
+    store.dispatch('part/getIndex');
+  }
+  if(!partsMaster.value.length) {
+    store.dispatch('part/getAll');
   }
 })
 
@@ -88,7 +93,7 @@ const removeImage = (index) => {
             <q-btn :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
           </div>
         </div>
-        </div>>
+        </div>
       </div>
     </q-form>
   </q-page>

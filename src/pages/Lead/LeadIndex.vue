@@ -5,9 +5,7 @@ import { Dialog } from 'quasar'
 
 const store = useStore()
 
-// store.commit('SET_DRAWER', true)
-
-const leads = computed(() => store.state.lead.leads)
+const main_data = computed(() => store.state.lead.main_data)
 const statuses = computed(() => store.state.lead.lead_status)
 
 onBeforeMount(() => {
@@ -80,6 +78,12 @@ const submit = () => {
   .finally(() => modal.value = false)
 }
 
+const loading = computed(() => store.state.loading)
+
+const paginateData = () => {
+  store.dispatch('lead/paginateData', { take: main_data.value.limit, skip: main_data.value.data.length})
+}
+
 </script>
 
 <template>
@@ -107,7 +111,7 @@ const submit = () => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, ind) in leads" :key="item.id">
+            <tr v-for="(item, ind) in main_data.data" :key="item.id">
               <td>{{ ind+1 }}</td>
               <td>{{ item.customer_name }}</td>
               <td>{{ item.customer_phone }}</td>
@@ -122,13 +126,16 @@ const submit = () => {
                 </div>
               </td>
             </tr>
-            <tr v-if="!leads.length">
+            <tr v-if="!main_data.available">
               <td colspan="6" >
                 <div class="text-center q-pa-xs">No data found</div></td>
             </tr>
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="q-pa-md text-center" v-if="main_data.count > main_data.data.length">
+      <q-btn :loading="loading" label="Loadmore.." outline size="md" color="primary" no-caps @click="paginateData"></q-btn>
     </div>
     <q-dialog v-model="modal" persistent>
       <q-card class="card-lg">

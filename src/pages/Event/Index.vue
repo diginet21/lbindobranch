@@ -37,7 +37,7 @@ const deleteItem = (item) => {
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
-        <q-breadcrumbs-el label="Banner" />
+        <q-breadcrumbs-el label="Event" />
       </q-breadcrumbs>
     </div>
      <div class="card-column">
@@ -54,7 +54,7 @@ const deleteItem = (item) => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, ind) in events" :key="item.id">
+            <tr v-for="(item, ind) in events.data" :key="item.id">
               <td>{{ ind+1 }}</td>
               <td>
                 <q-img v-if="item.asset" :src="item.asset.src" :ratio="9/6" width="70px"></q-img>
@@ -82,7 +82,7 @@ const deleteItem = (item) => {
             </tr>
           </tbody>
         </table>
-         <div v-if="!events.length" class="text-center full-width q-pa-md">No data found</div>
+         <div v-if="!events.available" class="text-center full-width q-pa-md">No data found</div>
       </div>
     </div>
   </q-page>

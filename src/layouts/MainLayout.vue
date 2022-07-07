@@ -68,7 +68,7 @@
           <q-list :dark="drawerIsDark" class="q-pb-xl">
             <q-item class="q-pl-none">
               <q-item-section>
-                <q-item-label header>Menu Navigasi</q-item-label>
+                <q-item-label header>Navigation</q-item-label>
               </q-item-section>
               <q-item-section side>
                 <q-toggle v-model="drawerIsDark" left-label label="Dark" size="sm" color="blue"></q-toggle>
@@ -82,6 +82,9 @@
                 <q-item-section>
                   <q-item-label>{{ menu.label }}</q-item-label>
                   <q-item-label caption>{{ menu.desc }}</q-item-label>
+                </q-item-section>
+                <q-item-section v-if="menu.count && menu.count > 0" side top>
+                  <q-badge color="amber">New {{ menu.count }}</q-badge>
                 </q-item-section>
             </q-item>
             <q-expansion-item  
@@ -162,6 +165,7 @@ export default defineComponent({
       if(localStorage.getItem('drawer_isdark')) {
         isDark.value = localStorage.getItem('drawer_isdark') == 'true' ? true : false
       }
+      store.dispatch('lead/getNewLeadCount')
     })
 
     return {
@@ -178,10 +182,12 @@ export default defineComponent({
         { pathName: 'Dashboard', label: 'Dashboard', icon: 'other_houses', desc: 'Dashboard'},
         { label: 'Vehicles', group: 'menu', icon: 'directions_car', desc: 'Manage Vehicle', pathName: 'Vehicles' },
         { label: 'Spareparts', group: 'menu', icon: 'space_dashboard', desc: 'Manage Sparepart',  pathName: 'PartIndex'},
+        { label: 'Services', icon: 'settings_applications', desc: 'Manage Services', pathName: 'LayananIndex'},
         { label: 'Prio Weekly', group: 'menu', icon: 'wysiwyg', desc: 'Manage Prioweekly', pathName: 'PostIndex', },
+        { label: 'Banner', icon: 'view_carousel', desc: 'Manage Banner', pathName: 'BannerIndex'},
         
         { label: 'Events', icon: 'event', desc: 'Manage Events', pathName: 'EventIndex'},
-        { label: 'Leads', icon: 'leaderboard', desc: 'Manage Leads', pathName: 'LeadIndex' },
+        { label: 'Leads', icon: 'leaderboard', desc: 'Manage Leads', pathName: 'LeadIndex', count: leadCount},
         { label: 'Order', icon: 'event', desc: 'Manage Order', pathName: 'OrderIndex'},
 
       ],

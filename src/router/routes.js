@@ -17,7 +17,7 @@ const routes = [
       { path: 'events/add', name: 'EventCreate', component: () => import('pages/Event/Create.vue') },
       { path: 'events/edit/:id', name: 'EventEdit', component: () => import('pages/Event/Edit.vue') },
       { path: 'parts', name: 'PartIndex', component: () => import('pages/Part/PartIndex.vue')},
-      { path: 'parts/edit/:part', name: 'PartEdit', component: () => import('pages/Part/PartEdit.vue')},
+      { path: 'parts/edit/:id', name: 'PartEdit', component: () => import('pages/Part/PartEdit.vue')},
       { path: 'parts/new', name: 'PartCreate', component: () => import('pages/Part/PartCreate.vue')},
       { path: 'Vehicles', name: 'Vehicles', component: () => import('pages/Vehicle/Index.vue') },
       { path: 'Vehicle/add', name: 'VehicleCreate', component: () => import('pages/Vehicle/Create.vue') },
@@ -25,6 +25,12 @@ const routes = [
       { path: 'orders', name: 'OrderIndex', component: () => import('pages/Order/OrderIndex.vue')},
       { path: 'orders/create', name: 'OrderCreate', component: () => import('pages/Order/OrderForm.vue')},
       { path: 'orders/edit/:id', name: 'OrderEdit', component: () => import('pages/Order/OrderForm.vue')},
+      { path: '/banners/add', name: 'BannerCreate', component: () => import('pages/Banner/Create.vue') },
+      { path: '/banners/edit/:id', name: 'BannerEdit', component: () => import('pages/Banner/Edit.vue') },
+      { path: '/banners', name: 'BannerIndex', component: () => import('pages/Banner/Index.vue') },
+      { path: '/layanan/new', name: 'LayananCreate', component: () => import('src/pages/Layanan/LayananForm.vue')},
+      { path: '/layanan/edit/:id', name: 'LayananEdit', component: () => import('pages/Layanan/LayananEdit.vue')},
+      { path: '/layanan', name: 'LayananIndex', component: () => import('pages/Layanan/LayananIndex.vue')},
     ]
   },
   {

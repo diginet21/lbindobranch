@@ -1,18 +1,26 @@
 import { Api } from 'boot/axios'
 
-export function getParts ({commit}) {
+export function getIndex ({commit}) {
   Api().get('/parts').then(response => {
     if(response.status == 200) {
-      commit('SET_PARTS', response.data)
+      commit('SET_DATA', response.data.data)
     }
   })
 }
 export function getAll ({commit}) {
   Api().get('/part-all').then(response => {
     if(response.status == 200) {
-      commit('SET_PARTS_ALL', response.data)
+      commit('SET_DATA_MASTER', response.data)
     }
   })
+}
+export function paginateData ({ commit }, payload) {
+  commit('SET_LOADING', true, { root: true })
+  Api().get('/parts?skip='+ payload.skip + '&take=' + payload.take).then(response => {
+    if(response.status == 200) {
+      commit('PAGINATE_DATA', response.data.data)
+    }
+  }).finally(() => commit('SET_LOADING', false, { root: true }))
 }
 export function getPartCategories ({commit}) {
   Api().get('/part-categories').then(response => {
@@ -28,7 +36,8 @@ export function partStore ({dispatch,commit}, payload) {
   payload._method = 'POST'
   Api().post('/parts', payload)
   .then(() => {
-    dispatch('getParts')
+    dispatch('getIndex')
+    dispatch('getAll')
     this.$router.push({name: 'PartIndex'})
   })
   .finally(() => commit('SET_LOADING', false, { root: true }))
@@ -38,7 +47,7 @@ export function partUpdate ({dispatch, commit}, payload) {
   payload._method = 'PUT'
   Api().post('/parts/'+payload.id, payload)
   .then(() => {
-    dispatch('getParts')
+    dispatch('getIndex')
     this.$router.push({name: 'PartIndex'})
   })
   .finally(() => commit('SET_LOADING', false, { root: true }))
@@ -46,6 +55,13 @@ export function partUpdate ({dispatch, commit}, payload) {
 
 export function getPartById({}, id) {
   return Api().get('/parts/' + id)
+}
+
+export function destroy ({dispatch}, id) {
+  Api().delete('/parts/' + id).finally(() => {
+   dispatch('getIndex')
+   dispatch('getAll')
+  })
 }
 
 function formatData(payload) {

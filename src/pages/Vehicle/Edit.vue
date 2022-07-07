@@ -9,7 +9,7 @@ const route = useRoute()
 
 const options = computed(() => store.getters['vehicle/getAllOptions'])
 const vehicle_master = computed(() => store.state.vehicle.vehicle_master)
-
+const masterOptions = ref([])
 const vehicle = ref(null);
 
 onBeforeMount(() => {
@@ -38,18 +38,31 @@ const setData = () => {
 const getData = () => {
   store.dispatch('vehicle/getById', route.params.id).then(response => {
     if(response.status == 200) {
-      vehicle.value = response.data.data
-      console.log(vehicle.value)
-      setData()
+      
+      let data = response.data.data
+      vehicle.value = data
+
+      form.id = data.id
+      form.vehicle_id = data.vehicle_id
+      form.dp_type = data.dp_type
+      form.sell_price = data.sell_price
+      form.dp_amount = data.dp_amount
+
+      let item = { value: data.vehicle_id, label: data.vehicle.title + ' ' + toMoney(data.vehicle.pricing.sell_price) }
+      masterOptions.value = [...options.value]
+      masterOptions.value.push(item)
+
     }
   })
 }
 const loading = computed(() => store.state.loading)
-
+const toMoney = (numb) => {
+  return 'Rp '+ numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
 const submit = () => {
   store.dispatch('vehicle/update', form)
 }
-  
+const dpType = ['Percent', 'Amount']
 </script>
 
 <template>
@@ -69,7 +82,7 @@ const submit = () => {
         <div class="col q-pa-sm">
           <div class="card-box">
             <div class="q-gutter-y-md">
-              <q-select outlined required label="Select Vehicle" v-model="form.vehicle_id" :options="options" map-options emit-value></q-select>
+              <q-select outlined required label="Select Vehicle" v-model="form.vehicle_id" :options="masterOptions" map-options emit-value></q-select>
               <q-input outlined required v-model="form.sell_price" label="Sell Price" mask="############" unmasked-value prefix="Rp"></q-input>
               <div class="row q-gutter-sm">
                 <div class="col">

@@ -9,11 +9,11 @@ const store = useStore()
 
 // store.commit('SET_DRAWER', true)
 
-const vehicles = computed(() => store.state.vehicle.vehicles)
+const main_data = computed(() => store.state.vehicle.main_data)
 const vehicle_master = computed(() => store.state.vehicle.vehicle_master)
 
 onBeforeMount(() => {
-  if(!vehicles.value.length) {
+  if(!main_data.value.data.length) {
     store.dispatch('vehicle/getIndex')
   }
   if(!vehicle_master.value.length) {
@@ -34,13 +34,18 @@ const deleteItem = (item) => {
 const toMoney = (numb) => {
   return 'Rp '+ numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
+const loading = computed(() => store.state.loading)
+
+const paginateData = () => {
+  store.dispatch('vehicle/paginateData', { take: main_data.value.limit, skip: main_data.value.data.length})
+}
 </script>
 
 <template>
   <q-page padding>
     <div class="q-py-sm">
       <div class="row items-center q-gutter-x-md">
-        <div class="title">Kendaraan</div>
+        <div class="title">Vehicles</div>
         <q-btn unelevated color="primary" padding="2px 12px" no-caps to="/vehicle/add">
           <q-icon name="add"></q-icon>
           <span>New Vehicle</span>
@@ -48,7 +53,7 @@ const toMoney = (numb) => {
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
-        <q-breadcrumbs-el label="Kendaraan" />
+        <q-breadcrumbs-el label="Vehicle" />
       </q-breadcrumbs>
     </div>
      <div class="card-column">
@@ -66,7 +71,7 @@ const toMoney = (numb) => {
           </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, ind) in vehicles" :key="ind">
+            <tr v-for="(item, ind) in main_data.data" :key="ind">
               <td>{{ ind+1 }}</td>
               <td>
                 <q-img v-if="item.assets.length" :src="item.assets[0].src" :ratio="1" width="60px" fit="contain"></q-img>
@@ -85,7 +90,7 @@ const toMoney = (numb) => {
                 </div>
               </td>
             </tr>
-             <tr v-if="!vehicles.length">
+             <tr v-if="!main_data.available">
               <td colspan="6" >
                 <div class="text-center q-pa-xs">No data found</div></td>
             </tr>
@@ -93,5 +98,8 @@ const toMoney = (numb) => {
         </table>
       </div>
     </div>
+     <div class="q-pa-md text-center" v-if="main_data.count > main_data.data.length">
+        <q-btn :loading="loading" label="Loadmore.." outline size="md" color="primary" no-caps @click="paginateData"></q-btn>
+      </div>
   </q-page>
 </template>

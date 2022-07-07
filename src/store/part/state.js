@@ -1,7 +1,13 @@
 export default function () {
   return {
-    parts: [],
+    main_data: {
+      data: [],
+      count: 0,
+      limit: 0,
+      skip: 0,
+      available: true
+    },
     part_categories: [],
-    parts_all: []
+    parts_master: []
   }
 }

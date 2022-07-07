@@ -1,5 +1,8 @@
 export default function () {
   return {
-    events: []
+    events: {
+      data: [],
+      available: true
+    }
   }
 }

@@ -11,19 +11,22 @@ const part = ref(null)
 const loading = computed(() => store.state.loading)
 
 onMounted(() => {
-  store.dispatch('part/getPartById', route.params.part)
-  .then((response) => {
-    // console.log( response.data.data);
-    part.value = response.data.data
-    setData()
-  })
+  getData()
 })
 
-const partAllOptions = computed(() => store.getters['part/getAllPartOptions'])
+const options = computed(() => store.getters['part/getAllPartOptions'])
+
+const main_data = computed(() => store.state.part.main_data)
+const partsMaster = computed(() => store.state.part.parts_master)
+const masterOptions = ref([])
+
 
 onMounted(() => {
-   if(partAllOptions.value.length < 2) {
-    store.dispatch('part/getAll')
+  if(!main_data.value.data.length) {
+    store.dispatch('part/getIndex');
+  }
+  if(!partsMaster.value.length) {
+    store.dispatch('part/getAll');
   }
 })
 
@@ -34,52 +37,27 @@ const form = reactive({
   sell_price: 0,
 })
 
-const setData = () => {
-  form.id = part.value.id
-  form.sparepart_id = part.value.sparepart_id
-  form.sell_price = part.value.sell_price
-}
+const getData = () => {
+  store.dispatch('part/getPartById', route.params.id)
+  .then((response) => {
+    let data = response.data.data
+    part.value = data
 
+    form.id = data.id
+    form.sparepart_id = data.sparepart_id
+    form.sell_price = data.sell_price
 
-const submit = () => {
-    store.dispatch('part/partUpdate', form)
-
-  }
-
-const imagePreview = ref([])
-
-const handleInputImage = (evt) => {
-
-  let files = evt.target.files
-
-  Array.from(files).forEach(file => {
-
-    form.images.push(file)
-
-    const reader = new FileReader()
-  
-    reader.onload = (e) => {
-      imagePreview.value.push(e.target.result)
-    }
-  
-    reader.readAsDataURL(file)
+    let item = { value: data.sparepart_id, label: data.sparepart.title + ' ' + toMoney(data.sparepart.pricing.sell_price) }
+    masterOptions.value = [...options.value]
+    masterOptions.value.push(item)
   })
-
 }
-
-const handleUploadImage = () => {
-  document.getElementById('inputFile').click()
+const toMoney = (numb) => {
+  return 'Rp '+ numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
-
-const removeImage = (index) => {
-  imagePreview.value.splice(index, 1)
-  form.images.splice(index, 1)
+const submit = () => {
+  store.dispatch('part/partUpdate', form)
 }
-const removeOldImage = (img) => {
-  oldImages.value = oldImages.value.filter(im => im.id != img.id)
-  form.delete_images.push(img.path)
-}
-
 </script>
 
 <template>
@@ -99,7 +77,7 @@ const removeOldImage = (img) => {
         <div class="col q-pa-sm">
           <div class="card-box block-container">
             <div class="q-gutter-y-md">
-              <q-select outlined v-model="form.sparepart_id" :options="partAllOptions" label="Pilih Sparepart" map-options emit-value></q-select>
+              <q-select outlined v-model="form.sparepart_id" :options="masterOptions" label="Pilih Sparepart" map-options emit-value></q-select>
               <q-input mask="###########" outlined v-model="form.sell_price" label="Sell Price" prefix="Rp"></q-input>
 
             </div>
@@ -108,7 +86,7 @@ const removeOldImage = (img) => {
             <q-btn :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
           </div>
         </div>
-        </div>>
+        </div>
       </div>
     </q-form>
   </q-page>
