@@ -67,9 +67,12 @@ const deleteItem = (item) => {
                 </div>
               </td>
             </tr>
+             <tr v-if="!banners.available">
+              <td colspan="6" >
+                <div class="text-center q-pa-xs">No data found</div></td>
+            </tr>
           </tbody>
         </table>
-         <div v-if="!banners.available" class="text-center full-width q-py-lg bg-grey-1">Tidak ada data</div>
       </div>
     </div>
   </q-page>
