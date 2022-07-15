@@ -6,8 +6,6 @@ import { useRoute } from 'vue-router'
 const store = useStore()
 const route = useRoute()
 
-const categoryOptions = computed(() => store.getters['postCategory/getPostCategoryOptions'])
-
 const banner = ref(null)
 
 const form = reactive({
@@ -29,11 +27,9 @@ onBeforeMount(() => {
 })
 
 const getDataById = (id) => {
- store.dispatch('banner/getBannerById', id).then((response) => {
+ store.dispatch('banner/getBannerById', id).then(response => {
 
    let data = response.data.data
-
-   console.log(data);
 
    banner.value = data
 
@@ -47,15 +43,7 @@ const getDataById = (id) => {
  })
 }
 
-onMounted(() => {
-  if(!categoryOptions.value.length) {
-    store.dispatch('postCategory/getPostCategories')
-  }
-})
-
 const loading = computed(() => store.state.loading)
-
-console.log(loading);
 
 const submit = () => {
   store.dispatch('banner/updateBanner', form)

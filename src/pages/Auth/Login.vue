@@ -10,7 +10,7 @@ export default {
     const form = reactive({
       email: null,
       password: null,
-      device_name: 'WEB'
+      device_name: 'BRANCH'
     })
 
     const errors = computed(() => store.state.errors)
@@ -38,8 +38,8 @@ export default {
         <div class="card-title">
           <h2>Login</h2>
           <div class="desc">Silahkan login untuk akses aplikasi</div>
+        <div class="text-red text-xs q-pt-xs" v-if="errors"> {{ errors.email[0] }}</div>
         </div>
-        <div class="text-red text-xs" v-if="errors"> {{ errors.email[0] }}</div>
         <q-form @submit.prevent="submit" class="">
             <div class="q-gutter-y-md">
               <q-input 
@@ -53,10 +53,10 @@ export default {
               <div class="q-py-md">
                 <q-btn :loading="loading" label="Login" type="submit" color="primary" class="full-width" unelevated></q-btn>
                 <div class="q-my-md"> <router-link to="/auth/forgot-password">Lupa Password?</router-link></div>
-                <div>
+                <!-- <div>
                   Belum punya akun?
                   <router-link to="/auth/register">Daftar Disini</router-link>
-                </div>
+                </div> -->
               </div>
             </div>
         </q-form>

@@ -121,8 +121,8 @@ const paginateData = () => {
               </td>
               <td>
                 <div class="q-gutter-sm">
-                  <q-btn round icon="view_list" size="sm" color="blue" unelevated @click="selectLead(item)"></q-btn>
-                  <!-- <q-btn round icon="edit" size="sm" color="blue" unelevated @click="editItem(item)"></q-btn> -->
+                  <!-- <q-btn round icon="view_list" size="sm" color="blue" unelevated @click="selectLead(item)"></q-btn> -->
+                  <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'LeadEdit', params: { id: item.id } }"></q-btn>
                 </div>
               </td>
             </tr>

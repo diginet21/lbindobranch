@@ -1,12 +1,12 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
-import { BaseApi  } from 'boot/axios';
+import { BaseApi, Api  } from 'boot/axios';
 
 import createPersistedState from "vuex-persistedstate";
 
 const dataState = createPersistedState({
   key: '_state-data_branch',
-  paths: ['user'],
+  paths: ['user', 'branch', 'config', 'site_setting'],
 })
 
 import user from './user'
@@ -18,6 +18,7 @@ import vehicle from './vehicle'
 import order from './order'
 import banner from './banner'
 import layanan from './layanan'
+import config from './config'
 
 /*
  * If not building with SSR mode, you can
@@ -34,7 +35,8 @@ export default store(function (/* { ssrContext } */) {
       errors: null,
       loading: false,
       drawer: true,
-      site_setting: null
+      site_setting: null,
+      branch: null
     },
     actions: {
       getSite: ({ commit }) => {
@@ -43,6 +45,14 @@ export default store(function (/* { ssrContext } */) {
             commit('SET_SETTING', response.data.results)
           }
          })
+      },
+     getCurrentBranch({ commit }) {
+        Api().get('getCurrentBranch').then(response => {
+          if(response.status == 200) {
+            console.log(response.data.results);
+            commit('SET_BRANCH', response.data.results)
+          }
+        })
       }
     },
     mutations: {
@@ -63,6 +73,9 @@ export default store(function (/* { ssrContext } */) {
       },
       SET_SETTING: ( state, payload ) => {
         state.site_setting = payload
+      },
+      SET_BRANCH: ( state, payload) => {
+        state.branch = payload
       }
     },
     modules: {
@@ -74,7 +87,8 @@ export default store(function (/* { ssrContext } */) {
       vehicle,
       order,
       banner,
-      layanan
+      layanan,
+      config
     },
     plugins: [dataState],
 

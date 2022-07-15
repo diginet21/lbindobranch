@@ -66,7 +66,7 @@ const paginateData = () => {
             <th>Title</th>
             <th>Default Price</th>
             <th>Sell Price</th>
-            <td>Down Payment</td>
+            <th>Down Payment</th>
             <th>Action</th>
           </tr>
           </thead>

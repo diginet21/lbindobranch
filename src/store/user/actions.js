@@ -1,12 +1,13 @@
 import { BaseApi, Api } from 'boot/axios'
 import { Notify } from 'quasar'
 
-export function login({commit}, payload) {
+export function login({commit, dispatch}, payload) {
   commit('SET_LOADING', true, { root: true})
   BaseApi().post('auth/login', payload)
   .then(response => {
     if(response.status == 200) {
       commit('SET_LOGIN', response.data.results)
+      dispatch('getCurrentBranch', null, { root: true })
       this.$router.push({name: 'Dashboard'})
     }
   })

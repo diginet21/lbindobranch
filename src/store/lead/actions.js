@@ -3,9 +3,14 @@ import { Api } from 'boot/axios'
 export function store ({}, payload) {
   return Api().post('leads', payload)
 }
-export function update ({ dispatch }, payload) {
+export function update ({ dispatch, commit }, payload) {
   payload._method = 'PUT'
-  return Api().post('leads/' + payload.id, payload)
+  commit('SET_LOADING', true, { root: true})
+  Api().post('/leads/' + payload.id, payload).then(() => {
+    dispatch('getAll')
+    this.$router.push({ name: 'LeadIndex'})
+
+  }).finally(() =>  commit('SET_LOADING', false, { root: true}))
 }
 export function updateStatus ({}, payload) {
   return Api().post('lead/updateStatus', payload)

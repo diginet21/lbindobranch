@@ -144,6 +144,8 @@ export default defineComponent({
 
     const isDark = ref(true)
 
+    const branch = computed(() => store.state.branch)
+
     const drawerIsDark = computed({
       get() {
         return isDark.value
@@ -166,6 +168,10 @@ export default defineComponent({
         isDark.value = localStorage.getItem('drawer_isdark') == 'true' ? true : false
       }
       store.dispatch('lead/getNewLeadCount')
+
+      // if(!branch.value) {
+      //   store.dispatch('getCurrentBranch')
+      // }
     })
 
     return {
@@ -189,6 +195,7 @@ export default defineComponent({
         { label: 'Events', icon: 'event', desc: 'Manage Events', pathName: 'EventIndex'},
         { label: 'Leads', icon: 'leaderboard', desc: 'Manage Leads', pathName: 'LeadIndex', count: leadCount},
         { label: 'Order', icon: 'event', desc: 'Manage Order', pathName: 'OrderIndex'},
+        { label: 'Settings', icon: 'settings', desc: 'Branch Settings', pathName: 'PaygateConfig'},
 
       ],
       menu2: [
