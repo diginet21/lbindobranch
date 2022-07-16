@@ -80,8 +80,7 @@ const paginateData = () => {
               <td>{{ toMoney(item.default_price) }}</td>
               <td>{{ toMoney(item.sell_price) }}</td>
               <td>
-                <div>Type : {{ item.dp_type }}</div>
-                <div>Value : {{ item.dp_type == 'Percent' ? item.dp_amount +'%' : toMoney(item.dp_amount) }}</div>
+                <div>{{ item.dp_type == 'Percent' ? item.dp_amount +'%' : toMoney(item.dp_amount) }}</div>
               </td>
               <td>
                 <div class="q-gutter-sm">
