@@ -52,7 +52,7 @@ const deleteItem = (item) => {
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="banners.ready">
             <tr v-for="(banner, ind) in banners.data" :key="banner.id">
               <td>{{ ind+1 }}</td>
               <td align="left">
@@ -73,6 +73,9 @@ const deleteItem = (item) => {
             </tr>
           </tbody>
         </table>
+        <div class="text-center q-py-lg" v-if="!banners.ready">
+          <q-spinner-facebook size="2em"></q-spinner-facebook>
+        </div>
       </div>
     </div>
   </q-page>

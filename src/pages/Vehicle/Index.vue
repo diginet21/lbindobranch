@@ -70,7 +70,7 @@ const paginateData = () => {
             <th>Action</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody v-if="main_data.ready">
             <tr v-for="(item, ind) in main_data.data" :key="ind">
               <td>{{ ind+1 }}</td>
               <td>
@@ -97,6 +97,9 @@ const paginateData = () => {
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="text-center q-py-lg" v-if="!main_data.ready">
+      <q-spinner-facebook size="2em"></q-spinner-facebook>
     </div>
      <div class="q-pa-md text-center" v-if="main_data.count > main_data.data.length">
         <q-btn :loading="loading" label="Loadmore.." outline size="md" color="primary" no-caps @click="paginateData"></q-btn>

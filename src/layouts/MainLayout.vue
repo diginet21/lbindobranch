@@ -12,7 +12,7 @@
         />
 
         <q-toolbar-title>
-          <img :src="sites.logo_src" v-if="sites && sites.logo" height="30">
+          <img :src="sites.logo_src" v-if="sites && sites.logo" height="40">
           <span v-else>Lautan Berlian</span>
         </q-toolbar-title>
         <q-space></q-space>

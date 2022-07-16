@@ -53,7 +53,7 @@ const deleteItem = (item) => {
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="events.ready">
             <tr v-for="(item, ind) in events.data" :key="item.id">
               <td>{{ ind+1 }}</td>
               <td>
@@ -82,6 +82,9 @@ const deleteItem = (item) => {
             </tr>
           </tbody>
         </table>
+        <div class="text-center q-py-lg" v-if="!events.ready">
+          <q-spinner-facebook size="2em"></q-spinner-facebook>
+        </div>
          <div v-if="!events.available" class="text-center full-width q-pa-md">No data found</div>
       </div>
     </div>

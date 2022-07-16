@@ -190,7 +190,7 @@ const reset = () => {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="main_data.ready">
             <tr v-for="(item, ind) in main_data.data" :key="item.id">
               <td>{{ ind+1 }}</td>
               <td>{{ item.customer_name }}</td>
@@ -212,6 +212,9 @@ const reset = () => {
             </tr>
           </tbody>
         </table>
+        <div class="text-center q-py-lg" v-if="!main_data.ready">
+          <q-spinner-facebook size="2em"></q-spinner-facebook>
+        </div>
       </div>
     </div>
     <div class="q-pa-md text-center" v-if="main_data.count > main_data.data.length">
