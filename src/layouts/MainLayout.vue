@@ -75,7 +75,7 @@
               </q-item-section>
             </q-item>
             <template v-for="menu in expansionMenu" :key="menu.label">
-            <q-item v-if="!menu.childs" clickable :to="{ name: menu.pathName }">
+            <q-item v-if="!menu.childs" clickable :to="{ name: menu.pathName }" exact>
               <q-item-section avatar>
                   <q-icon :name="menu.icon"/>
                 </q-item-section>
@@ -194,7 +194,7 @@ export default defineComponent({
         
         { label: 'Events', icon: 'event', desc: 'Manage Events', pathName: 'EventIndex'},
         { label: 'Leads', icon: 'leaderboard', desc: 'Manage Leads', pathName: 'LeadIndex', count: leadCount},
-        { label: 'Order', icon: 'event', desc: 'Manage Order', pathName: 'OrderIndex'},
+        { label: 'Orders', icon: 'event', desc: 'Manage Orders', pathName: 'OrderIndex'},
         { label: 'Settings', icon: 'settings', desc: 'Branch Settings', pathName: 'PaygateConfig'},
 
       ],

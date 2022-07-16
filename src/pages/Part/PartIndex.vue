@@ -5,8 +5,6 @@ import { Dialog } from 'quasar'
 
 const store = useStore()
 
-// store.commit('SET_DRAWER', true)
-
 const main_data = computed(() => store.state.part.main_data)
 const partsMaster = computed(() => store.state.part.parts_master)
 
@@ -44,15 +42,15 @@ const paginateData = () => {
   <q-page padding>
     <div class="q-py-sm">
       <div class="row items-center q-gutter-x-md">
-        <div class="title">Parts</div>
+        <div class="title">Spareparts</div>
         <q-btn unelevated color="primary" padding="2px 12px" no-caps :to="{ name: 'PartCreate'}">
           <q-icon name="add"></q-icon>
-          <span>New Parts</span>
+          <span>New Spareparts</span>
         </q-btn>
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
-        <q-breadcrumbs-el label="Parts" />
+        <q-breadcrumbs-el label="Spareparts" />
       </q-breadcrumbs>
     </div>
      <div class="card-column">

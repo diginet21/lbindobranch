@@ -12,7 +12,7 @@ onBeforeMount(() => {
   if(!statuses.value.length) {
     store.dispatch('lead/getStatus');
   }
-  store.dispatch('lead/getAll');
+  getData()
 })
 
 const statusOptions = computed(() => {
@@ -61,8 +61,8 @@ const editItem = (item) => {
 
 const updateLead = () => {
    store.dispatch('lead/updateStatus', { id: form.id, lead_status_id: form.lead_status_id }).then(() => {
-    store.dispatch('lead/getAll');
-    store.dispatch('lead/getNewLeadCount');
+     store.dispatch('lead/getNewLeadCount');
+     getData()
   })
   .finally(() => {
     modal.value = false
@@ -70,6 +70,9 @@ const updateLead = () => {
   })
 }
 
+const getData = () => {
+  store.dispatch('lead/getAll', formFilter);
+}
 const submit = () => {
   store.dispatch('lead/update', form).then(() => {
     store.dispatch('lead/getAll');
@@ -80,10 +83,32 @@ const submit = () => {
 
 const loading = computed(() => store.state.loading)
 
+const formFilter = reactive({
+  branch_id: '',
+  limit: 5,
+  start: '',
+  end: ''
+})
+
 const paginateData = () => {
-  store.dispatch('lead/paginateData', { take: main_data.value.limit, skip: main_data.value.data.length})
+   let payload = {
+    skip: main_data.value.data.length,
+    limit: main_data.value.limit,
+  };
+  payload = { ...payload, ...formFilter };
+
+  store.dispatch('lead/paginateData', payload)
 }
 
+const filterData = () => {
+  store.dispatch("lead/filterData", formFilter);
+};
+const reset = () => {
+  formFilter.branch_id = ''
+  formFilter.start = ''
+  formFilter.end = ''
+  getData()
+}
 </script>
 
 <template>
@@ -97,6 +122,61 @@ const paginateData = () => {
         <q-breadcrumbs-el :label="title" />
       </q-breadcrumbs>
     </div>
+    <q-form class="col"
+        @submit.prevent="filterData"
+      >
+      <div class="row q-gutter-x-sm q-mt-sm">
+        <div class="col">
+          <q-input 
+            stack-label
+            label="Start"
+            filled
+            square
+            dense
+            type="date"
+            v-model="formFilter.start"
+          ></q-input>
+        </div>
+        <div class="col">
+          <q-input
+            stack-label
+            label="End"
+            filled
+            square
+            dense
+            type="date"
+            v-model="formFilter.end"
+          ></q-input>
+        </div>
+        <div class="col">
+          <q-select
+            required
+            filled
+            stack-label
+            square
+            dense
+            label="Showing"
+          :options="[5,10,20,50,100]"
+          v-model="formFilter.limit">
+          </q-select>
+        </div>
+        <q-btn
+          type="submit"
+          label="Filter"
+          unelevated
+          color="dark"
+          :disable="loading"
+        ></q-btn>
+        <q-btn
+          type="button"
+          label="Reset"
+          unelevated
+          color="dark"
+          :disable="loading"
+          @click.prevent="reset"
+        ></q-btn>
+      </div>
+    </q-form>
      <div class="card-column">
       <div class="table-responsive">
         <table class="table striped">

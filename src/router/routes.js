@@ -5,9 +5,9 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     meta: { requiresAuth: true },
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
+      // { path: '', component: () => import('pages/Index.vue') },
+      { path: '', name: 'Dashboard', component: () => import('pages/Dashboard.vue') },
       { path: 'Account', name: 'Account', component: () => import('pages/Account.vue') },
-      { path: 'Dashboard', name: 'Dashboard', component: () => import('pages/Dashboard.vue') },
       { path: 'posts', name: 'PostIndex', component: () => import('pages/Post/Index.vue') },
       { path: 'posts/add', name: 'PostCreate', component: () => import('pages/Post/Create.vue') },
       { path: 'posts/edit/:id', name: 'PostEdit', component: () => import('pages/Post/Edit.vue') },

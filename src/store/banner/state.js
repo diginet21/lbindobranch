@@ -2,7 +2,8 @@ export default function () {
   return {
     banners: {
       data: [],
-      available: true
+      available: true,
+      ready: false
     }
   }
 }

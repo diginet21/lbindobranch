@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { Dialog } from 'quasar'
 
@@ -9,10 +9,12 @@ const main_data = computed(() => store.state.order.main_data)
 
 onMounted(() => {
   if(!main_data.value.data.length) {
-    store.dispatch('order/getOrders');
+    getData()
   }
 })
-
+const getData = () => {
+  store.dispatch('order/getOrders');
+}
 const deleteItem = (item) => {
  Dialog.create({
     title: 'Yakin Akan menghapus data?',
@@ -26,17 +28,39 @@ const deleteItem = (item) => {
 
 const loading = computed(() => store.state.loading)
 
+const formFilter = reactive({
+  branch_id: '',
+  limit: 5,
+  start: '',
+  end: ''
+})
+
 const paginateData = () => {
-  store.dispatch('order/paginateData', { take: main_data.value.limit, skip: main_data.value.data.length})
+   let payload = {
+    skip: main_data.value.data.length,
+    limit: main_data.value.limit,
+  };
+  payload = { ...payload, ...formFilter };
+
+  store.dispatch('order/paginateData', payload)
 }
 
+const filterData = () => {
+  store.dispatch("order/filterData", formFilter);
+};
+const reset = () => {
+  formFilter.branch_id = ''
+  formFilter.start = ''
+  formFilter.end = ''
+  getData()
+}
 </script>
 
 <template>
   <q-page padding>
     <div class="q-py-sm">
       <div class="row items-center q-gutter-x-md">
-        <div class="title">Order</div>
+        <div class="title">Orders</div>
         <!-- <q-btn unelevated color="primary" padding="2px 12px" no-caps :to="{ name: 'OrderCreate'}">
           <q-icon name="add"></q-icon>
           <span>New Order</span>
@@ -47,6 +71,61 @@ const paginateData = () => {
         <q-breadcrumbs-el label="Order" />
       </q-breadcrumbs>
     </div>
+    <q-form class="col"
+        @submit.prevent="filterData"
+      >
+      <div class="row q-gutter-x-sm q-mt-sm">
+        <div class="col">
+          <q-input 
+            stack-label
+            label="Start"
+            filled
+            square
+            dense
+            type="date"
+            v-model="formFilter.start"
+          ></q-input>
+        </div>
+        <div class="col">
+          <q-input
+            stack-label
+            label="End"
+            filled
+            square
+            dense
+            type="date"
+            v-model="formFilter.end"
+          ></q-input>
+        </div>
+        <div class="col">
+          <q-select
+            required
+            filled
+            stack-label
+            square
+            dense
+            label="Showing"
+          :options="[5,10,20,50,100]"
+          v-model="formFilter.limit">
+          </q-select>
+        </div>
+        <q-btn
+          type="submit"
+          label="Filter"
+          unelevated
+          color="dark"
+          :disable="loading"
+        ></q-btn>
+        <q-btn
+          type="button"
+          label="Reset"
+          unelevated
+          color="dark"
+          :disable="loading"
+          @click.prevent="reset"
+        ></q-btn>
+      </div>
+    </q-form>
      <div class="card-column">
       <div class="table-responsive">
         <table class="table striped">

@@ -1,7 +1,26 @@
 import { Api } from 'boot/axios'
 
-export function getOrders ({ commit }) {
-  Api().get('/orders').then(response => {
+export function getOrders ({ commit }, payload = null) {
+  
+  let url = 'orders'
+
+  if(payload) {
+    let params = setParams(payload)
+    url += `?${params}`
+  }
+  Api().get(url).then(response => {
+    if(response.status == 200) {
+      commit('SET_DATA', response.data.data)
+    }
+  })
+  
+}
+export function filterData ({ commit }, payload) {
+  let url = 'orders'
+
+  url += `?${setParams(payload)}`
+
+  Api().get(url).then(response => {
     if(response.status == 200) {
       commit('SET_DATA', response.data.data)
     }
@@ -17,4 +36,16 @@ export function paginateData ({ commit }, payload) {
 }
 export function getById ({ commit }, id) {
   return Api().get('/orders/' +id)
+}
+
+function setParams(payload) {
+  let data = {};
+  for(const k in payload) {
+    if(payload[k]) {
+      data[k] = payload[k]
+    }
+  }
+  let params = new URLSearchParams(data).toString();
+
+  return params
 }

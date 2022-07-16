@@ -75,7 +75,7 @@ const removeImage = (index) => {
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
-        <q-breadcrumbs-el label="Parts" />
+        <q-breadcrumbs-el label="Spareparts" />
         <q-breadcrumbs-el label="New" />
       </q-breadcrumbs>
     </div>

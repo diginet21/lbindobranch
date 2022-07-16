@@ -64,11 +64,11 @@ const submit = () => {
   <q-page padding>
     <div class="q-py-sm">
       <div class="row items-center q-gutter-x-md">
-        <div class="title">Add Spareparts</div>
+        <div class="title">Edit Spareparts</div>
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
-        <q-breadcrumbs-el label="Parts" />
+        <q-breadcrumbs-el label="Spareparts" />
         <q-breadcrumbs-el label="New" />
       </q-breadcrumbs>
     </div>

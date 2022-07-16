@@ -2,7 +2,8 @@ export default function () {
   return {
     events: {
       data: [],
-      available: true
+      available: true,
+      ready: false
     }
   }
 }

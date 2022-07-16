@@ -6,7 +6,8 @@ export default function () {
       limit: 0,
       skip: 0,
       canPaginate: false,
-      available: true
+      available: true,
+      ready: false
     },
     vehicle_master: []
   }

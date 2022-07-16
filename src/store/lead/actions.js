@@ -15,12 +15,29 @@ export function update ({ dispatch, commit }, payload) {
 export function updateStatus ({}, payload) {
   return Api().post('lead/updateStatus', payload)
 }
-export function getAll ({commit}) {
-   Api().get('leads').then(response => {
-     if(response.status == 200) {
-       commit('SET_DATA', response.data.data)
-     }
-   })
+export function getAll ({commit}, payload = null) {
+  let url = 'leads'
+
+  if(payload) {
+    let params = setParams(payload)
+    url += `?${params}`
+  }
+  Api().get(url).then(response => {
+    if(response.status == 200) {
+      commit('SET_DATA', response.data.data)
+    }
+  })
+}
+export function filterData ({ commit }, payload) {
+  let url = 'orders'
+
+  url += `?${setParams(payload)}`
+
+  Api().get(url).then(response => {
+    if(response.status == 200) {
+      commit('SET_DATA', response.data.data)
+    }
+  })
 }
 export function paginateData ({ commit }, payload) {
   commit('SET_LOADING', true, { root: true })
@@ -51,3 +68,14 @@ export function destroy ({dispatch}, id) {
    Api().delete('leads/' + id).finally(() => dispatch('getAll'))
 }
 
+function setParams(payload) {
+  let data = {};
+  for(const k in payload) {
+    if(payload[k]) {
+      data[k] = payload[k]
+    }
+  }
+  let params = new URLSearchParams(data).toString();
+
+  return params
+}

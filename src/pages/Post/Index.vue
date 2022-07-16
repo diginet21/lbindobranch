@@ -57,8 +57,8 @@ const deleteItem = (item) => {
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            <tr v-for="(post, ind) in posts" :key="post.id">
+          <tbody v-if="posts.ready">
+            <tr v-for="(post, ind) in posts.data" :key="post.id">
               <td>{{ ind+1 }}</td>
               <td>
                 <q-img v-if="post.asset" :src="post.asset.src" :ratio="9/6" width="70px"></q-img>
@@ -71,12 +71,15 @@ const deleteItem = (item) => {
                 </div>
               </td>
             </tr>
-             <tr v-if="!posts.length">
+             <tr v-if="!posts.available">
               <td colspan="4" >
                 <div class="text-center q-pa-xs">No data found</div></td>
             </tr>
           </tbody>
         </table>
+        <div class="text-center q-py-lg" v-if="!posts.ready">
+          <q-spinner-facebook size="2em"></q-spinner-facebook>
+        </div>
       </div>
     </div>
   </q-page>
