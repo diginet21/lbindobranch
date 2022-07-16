@@ -44,10 +44,10 @@ export function partStore ({dispatch,commit}, payload) {
 }
 export function partUpdate ({dispatch, commit}, payload) {
   commit('SET_LOADING', true, { root: true })
-  payload._method = 'PUT'
   Api().post('/parts/'+payload.id, payload)
   .then(() => {
     dispatch('getIndex')
+    dispatch('getAll')
     this.$router.push({name: 'PartIndex'})
   })
   .finally(() => commit('SET_LOADING', false, { root: true }))

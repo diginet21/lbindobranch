@@ -49,7 +49,7 @@ const deleteItem = (item) => {
               <th>Image</th>
               <th>Title</th>
               <th>Time</th>
-              <th>Admin</th>
+              <th>Approved</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -72,7 +72,7 @@ const deleteItem = (item) => {
                   </tr>
                 </table>
               </td>
-              <td>{{ item.admin ? item.admin.name : '-' }}</td>
+              <td>{{ item.is_active? 'Yes' : 'No' }}</td> 
               <td>
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(item)"></q-btn>

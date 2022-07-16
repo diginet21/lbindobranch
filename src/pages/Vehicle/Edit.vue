@@ -22,18 +22,10 @@ const form = reactive({
   id: '',
   _method: 'PUT',
   vehicle_id: '',
-  sell_price: 0,
+  sell_price: '',
   dp_type: '',
   dp_amount: ''
 })
-
-const setData = () => {
-  form.id = vehicle.value.id
-  form.vehicle_id = vehicle.value.vehicle_id
-  form.dp_type = vehicle.value.dp_type
-  form.sell_price = vehicle.value.sell_price
-  form.dp_amount = vehicle.value.dp_amount
-}
 
 const getData = () => {
   store.dispatch('vehicle/getById', route.params.id).then(response => {
@@ -48,7 +40,7 @@ const getData = () => {
       form.sell_price = data.sell_price
       form.dp_amount = data.dp_amount
 
-      let item = { value: data.vehicle_id, label: data.vehicle.title + ' ' + toMoney(data.vehicle.pricing.sell_price) }
+      let item = { value: data.vehicle_id, label: data.vehicle.title + ' ' + toMoney(data.vehicle.price) }
       masterOptions.value = [...options.value]
       masterOptions.value.push(item)
 
@@ -69,7 +61,7 @@ const dpType = ['Percent', 'Amount']
   <q-page padding>
     <div class="q-py-sm">
       <div class="row items-center q-gutter-x-md">
-        <div class="title">Add New Vehicle</div>
+        <div class="title">Edit New Vehicle</div>
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
@@ -82,14 +74,15 @@ const dpType = ['Percent', 'Amount']
         <div class="col q-pa-sm">
           <div class="card-box">
             <div class="q-gutter-y-md">
-              <q-select outlined required label="Select Vehicle" v-model="form.vehicle_id" :options="masterOptions" map-options emit-value></q-select>
-              <q-input outlined required v-model="form.sell_price" label="Sell Price" mask="############" unmasked-value prefix="Rp"></q-input>
+              <q-select filled required label="Select Vehicle" v-model="form.vehicle_id" :options="masterOptions" map-options emit-value></q-select>
+                <money-formatter v-model="form.sell_price" />
               <div class="row q-gutter-sm">
                 <div class="col">
-                  <q-select outlined required label="Down Payment Type" v-model="form.dp_type" :options="dpType" map-options emit-value></q-select>
+                  <q-select filled required label="Down Payment Type" v-model="form.dp_type" :options="dpType" map-options emit-value></q-select>
                 </div>
-                <div class="col">
-                  <q-input outlined required v-model="form.dp_amount" label="Down Payment Amount" mask="##############" unmasked-value :prefix="form.dp_type == 'Amount' ? 'Rp' : ''" :max="form.dp_type == 'Percent' ? 100 : ''"></q-input>
+                 <div class="col">
+                  <money-formatter required v-if="form.dp_type == 'Amount'" v-model="form.dp_amount" label="Down Payment Amount"/>
+                  <q-input v-else filled required v-model="form.dp_amount" label="Down Payment Amount" mask="###"></q-input>
                 </div>
               </div>
             </div>

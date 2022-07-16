@@ -37,6 +37,7 @@ const form = reactive({
   sell_price: 0,
 })
 
+
 const getData = () => {
   store.dispatch('part/getPartById', route.params.id)
   .then((response) => {
@@ -47,7 +48,7 @@ const getData = () => {
     form.sparepart_id = data.sparepart_id
     form.sell_price = data.sell_price
 
-    let item = { value: data.sparepart_id, label: data.sparepart.title + ' ' + toMoney(data.sparepart.pricing.sell_price) }
+    let item = { value: data.sparepart_id, label: data.sparepart.title + ' ' + toMoney(data.sparepart.price) }
     masterOptions.value = [...options.value]
     masterOptions.value.push(item)
   })
@@ -55,6 +56,7 @@ const getData = () => {
 const toMoney = (numb) => {
   return 'Rp '+ numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
+
 const submit = () => {
   store.dispatch('part/partUpdate', form)
 }
@@ -77,9 +79,8 @@ const submit = () => {
         <div class="col q-pa-sm">
           <div class="card-box block-container">
             <div class="q-gutter-y-md">
-              <q-select outlined v-model="form.sparepart_id" :options="masterOptions" label="Pilih Sparepart" map-options emit-value></q-select>
-              <q-input mask="###########" outlined v-model="form.sell_price" label="Sell Price" prefix="Rp"></q-input>
-
+              <q-select filled v-model="form.sparepart_id" :options="masterOptions" label="Select Sparepart" map-options emit-value></q-select>
+              <money-formatter v-model="form.sell_price" label="Sell Price"/>
             </div>
           <div class="submit-block">
             <q-btn :disable="loading" label="Cancel" color="primary" flat :to="{ name: 'PartIndex' }"></q-btn>

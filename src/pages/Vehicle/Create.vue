@@ -1,6 +1,6 @@
 
 <script setup>
-import { reactive, ref, computed, onMounted, onBeforeMount } from 'vue'
+import { reactive, ref, computed, onMounted, onBeforeMount, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -19,12 +19,15 @@ onBeforeMount(() => {
     store.dispatch('vehicle/getAll')
   }
 })
-
 const form = reactive({
   sell_price: '',
   vehicle_id: '',
   dp_type: '',
   dp_amount: ''
+})
+
+watch(() => form.dp_type, () => {
+  form.dp_amount = ''
 })
 
 const loading = computed(() => store.state.loading)
@@ -34,6 +37,8 @@ const submit = () => {
 }
 
 const dpType = ['Percent', 'Amount']
+
+const pricing = ref('')
 
 </script>
 
@@ -54,14 +59,16 @@ const dpType = ['Percent', 'Amount']
         <div class="col q-pa-sm">
           <div class="card-box">
             <div class="q-gutter-y-md">
-                <q-select outlined required label="Select Vehicle" v-model="form.vehicle_id" :options="options" map-options emit-value></q-select>
-                <q-input outlined required v-model="form.sell_price" label="Sell Price" mask="##############" unmasked-value prefix="Rp"></q-input>
+                <q-select filled required label="Select Vehicle" v-model="form.vehicle_id" :options="options" map-options emit-value></q-select>
+                {{ form }}
+                 <money-formatter v-model="form.sell_price" />
               <div class="row q-gutter-sm">
                 <div class="col">
-                  <q-select outlined required label="Down Payment Type" v-model="form.dp_type" :options="dpType" map-options emit-value></q-select>
+                  <q-select filled required label="Down Payment Type" v-model="form.dp_type" :options="dpType" map-options emit-value></q-select>
                 </div>
                 <div class="col">
-                  <q-input outlined required v-model="form.dp_amount" label="Down Payment Amount" mask="##############" unmasked-value :prefix="form.dp_type == 'Amount' ? 'Rp' : ''" :max="form.dp_type == 'Percent' ? 100 : ''"></q-input>
+                  <money-formatter required v-if="form.dp_type == 'Amount'" v-model="form.dp_amount" label="Down Payment Amount"/>
+                  <q-input v-else filled required v-model="form.dp_amount" label="Down Payment Amount" mask="###"></q-input>
                 </div>
               </div>
               </div>

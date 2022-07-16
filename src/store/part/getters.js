@@ -5,7 +5,7 @@ export function getPartCategoryOptions (state) {
   return opts
 }
 export function getAllPartOptions (state) {
-  return state.parts_master.map(e => ({ value: e.id, label: e.title + ' ' + money(e.pricing.sell_price) }))
+  return state.parts_master.map(e => ({ value: e.id, label: e.title + ' ' + money(e.price) }))
 
 }
 

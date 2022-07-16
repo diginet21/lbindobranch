@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, onMounted, ref } from 'vue'
+import { computed, reactive, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
@@ -22,20 +22,22 @@ onMounted(() => {
 const deleteItem = (id) => {
   console.log(id);
 }
+const money = (numb) => {
+  return numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
 
 const form = reactive({
   sparepart_id: '',
-  sell_price: 0,
+  sell_price: '',
 })
 
-// store.commit('SET_DRAWER', false)
-
 const submit = () => {
-    store.dispatch('part/partStore', form)
-
-  }
+  store.dispatch('part/partStore', form)
+}
 
 const imagePreview = ref([])
+
 
 const handleInputImage = (evt) => {
 
@@ -84,9 +86,8 @@ const removeImage = (index) => {
         <div class="col q-pa-sm">
           <div class="card-box block-container">
             <div class="q-gutter-y-md">
-              <q-select outlined v-model="form.sparepart_id" :options="partAllOptions" label="Pilih Sparepart" map-options emit-value></q-select>
-              <q-input mask="###########" outlined v-model="form.sell_price" label="Sell Price" prefix="Rp"></q-input>
-
+              <q-select filled v-model="form.sparepart_id" :options="partAllOptions" label="Select Sparepart" map-options emit-value></q-select>
+             <money-formatter v-model="form.sell_price" label="Sell Price"/>
             </div>
           <div class="submit-block">
             <q-btn :disable="loading" label="Cancel" color="primary" flat :to="{ name: 'PartIndex' }"></q-btn>

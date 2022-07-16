@@ -54,6 +54,7 @@ const deleteItem = (item) => {
               <th>#</th>
               <th>Image</th>
               <th>Title</th>
+              <th>Approved</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -64,6 +65,7 @@ const deleteItem = (item) => {
                 <q-img v-if="post.asset" :src="post.asset.src" :ratio="9/6" width="70px"></q-img>
               </td>
               <td>{{ post.title }}</td> 
+              <td>{{ post.is_active? 'Yes' : 'No' }}</td> 
               <td>
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(post)"></q-btn>

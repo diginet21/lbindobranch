@@ -21,7 +21,7 @@ onMounted(() => {
 
 const form = reactive({
   layanan_id: '',
-  sell_price: 0,
+  sell_price: '',
 })
 
 const submit = () => {
@@ -47,9 +47,8 @@ const submit = () => {
         <div class="col q-pa-sm">
           <div class="card-box block-container">
             <div class="q-gutter-y-md">
-              <q-select outlined v-model="form.layanan_id" :options="masterOptions" label="Select Services" map-options emit-value></q-select>
-              <q-input mask="###########" outlined v-model="form.sell_price" label="Sell Price" prefix="Rp"></q-input>
-
+              <q-select filled v-model="form.layanan_id" :options="masterOptions" label="Select Services" map-options emit-value></q-select>
+              <money-formatter v-model="form.sell_price" label="Sell Price"/>
             </div>
           <div class="submit-block">
             <q-btn :disable="loading" label="Cancel" color="primary" flat :to="{ name: 'LayananIndex' }"></q-btn>

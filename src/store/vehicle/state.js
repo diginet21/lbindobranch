@@ -5,7 +5,6 @@ export default function () {
       count: 0,
       limit: 0,
       skip: 0,
-      canPaginate: false,
       available: true,
       ready: false
     },

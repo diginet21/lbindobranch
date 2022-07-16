@@ -47,8 +47,9 @@ const deleteItem = (item) => {
             <tr>
               <th>#</th>
               <th>Image</th>
-              <th align="left">Title</th>
-              <th align="left">Type</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Approved</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -60,6 +61,7 @@ const deleteItem = (item) => {
               </td>
               <td align="left">{{ banner.title }}</td>
               <td align="left">{{ banner.banner_type }}</td>
+              <td>{{ banner.is_active ? 'Yes' : 'No' }}</td>
               <td>
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(banner)"></q-btn>
