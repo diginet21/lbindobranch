@@ -60,7 +60,6 @@ const pricing = ref('')
           <div class="card-box">
             <div class="q-gutter-y-md">
                 <q-select filled required label="Select Vehicle" v-model="form.vehicle_id" :options="options" map-options emit-value></q-select>
-                {{ form }}
                  <money-formatter v-model="form.sell_price" />
               <div class="row q-gutter-sm">
                 <div class="col">
