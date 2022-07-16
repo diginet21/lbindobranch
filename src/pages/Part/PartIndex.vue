@@ -89,7 +89,7 @@ const paginateData = () => {
           </tbody>
         </table>
       </div>
-      <div class="text-center q-py-lg" v-if="!main_data.ready">
+      <div class="text-center q-py-md" v-if="!main_data.ready">
           <q-spinner-facebook size="2em"></q-spinner-facebook>
         </div>
     </div>

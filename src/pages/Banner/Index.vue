@@ -73,7 +73,7 @@ const deleteItem = (item) => {
             </tr>
           </tbody>
         </table>
-        <div class="text-center q-py-lg" v-if="!banners.ready">
+        <div class="text-center q-py-md" v-if="!banners.ready">
           <q-spinner-facebook size="2em"></q-spinner-facebook>
         </div>
       </div>

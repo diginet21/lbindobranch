@@ -82,7 +82,7 @@ const deleteItem = (item) => {
             </tr>
           </tbody>
         </table>
-        <div class="text-center q-py-lg" v-if="!events.ready">
+        <div class="text-center q-py-md" v-if="!events.ready">
           <q-spinner-facebook size="2em"></q-spinner-facebook>
         </div>
          <div v-if="!events.available" class="text-center full-width q-pa-md">No data found</div>
