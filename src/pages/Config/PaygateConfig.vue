@@ -23,6 +23,7 @@ const getData = () => {
   })
 }
 const form = reactive({
+  id: '',
   branch_id: '',
   provider: '',
   endpoint:'',
@@ -34,7 +35,8 @@ const form = reactive({
 })
 
 const setData = (data) => {
-  form.branch_id = data.id
+  form.id = data.id
+  form.branch_id = data.branch_id
   form.provider = data.provider
   form.endpoint = data.endpoint
   form.endpoint_sanbox = data.endpoint_sanbox
