@@ -12,11 +12,7 @@ const config = computed(() => store.state.config.paygate_config)
 const branch = computed(() => store.state.branch)
 
 onBeforeMount(() => {
-  if(config.value) {
-    setData(config.value)
-  }else {
-    getData()
-  }
+  getData()
 })
 
 const getData = () => {
