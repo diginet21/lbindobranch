@@ -52,12 +52,12 @@ const modeOptions = ['sanbox', 'producttion']
 
 const updatedata = () => {
   store.commit('SET_LOADING', true)
-  store.dispatch('setting/storePaygate', form).then(response => {
+  store.dispatch('config/storePaygate', form).then(response => {
     Notify.create({
       type: 'positive',
       message: 'Berhasil memperbarui data'
     })
-      store.commit('setting/SET_PAYGATE', response.data.results)
+      store.commit('config/SET_PAYGATE', response.data.results)
       setData(response.data.results)
     })
     .finally(() => {
