@@ -6,7 +6,8 @@ export default function () {
       limit: 0,
       skip: 0,
       available: true,
-      ready: false
+      ready: false,
+      total: 0
     },
   }
 }
