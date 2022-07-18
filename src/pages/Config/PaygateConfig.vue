@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref, computed, onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
-import { Notify } from 'quasar'
+import { Loading, Notify } from 'quasar'
 
 import MenuConfig from './MenuConfigTabs.vue'
 
@@ -17,9 +17,9 @@ onBeforeMount(() => {
 
 const getData = () => {
   store.dispatch('config/getPaygate', branch.value.id).then(response => {
-    store.commit('config/SET_PAYGATE', response.data.results)
+    store.commit('config/SET_PAYGATE', response.data.data)
 
-    setData(response.data.results)
+    setData(response.data.data)
   })
 }
 const form = reactive({
@@ -49,17 +49,17 @@ const setData = (data) => {
 const modeOptions = ['sanbox', 'producttion']
 
 const updatedata = () => {
-  store.commit('SET_LOADING', true)
+  Loading.show()
   store.dispatch('config/storePaygate', form).then(response => {
     Notify.create({
       type: 'positive',
       message: 'Berhasil memperbarui data'
     })
-      store.commit('config/SET_PAYGATE', response.data.results)
-      setData(response.data.results)
+      store.commit('config/SET_PAYGATE', response.data.data)
+      setData(response.data.data)
     })
     .finally(() => {
-      store.commit('SET_LOADING', false)
+      Loading.hide()
     })
 }
 

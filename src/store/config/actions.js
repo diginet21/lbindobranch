@@ -7,4 +7,7 @@ export function storePaygate({}, payload) {
 export function getPaygate({}, id) {
   return Api().get('paygate-config/' + id)
 }
+export function updateBranch({}, payload) {
+  return Api().post('update-branch/' + payload.id, payload)
+}
 

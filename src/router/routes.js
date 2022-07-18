@@ -33,6 +33,7 @@ const routes = [
       { path: 'layanan/edit/:id', name: 'LayananEdit', component: () => import('pages/Layanan/LayananEdit.vue')},
       { path: 'layanan', name: 'LayananIndex', component: () => import('pages/Layanan/LayananIndex.vue')},
       { path: 'paygate-config', name: 'PaygateConfig', component: () => import('pages/Config/PaygateConfig.vue')},
+      { path: 'branch-config', name: 'BranchConfig', component: () => import('pages/Config/BranchConfig.vue')},
     ]
   },
   {

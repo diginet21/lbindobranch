@@ -193,7 +193,7 @@ export default defineComponent({
         { label: 'Events', icon: 'event', desc: 'Manage Events', pathName: 'EventIndex'},
         { label: 'Leads', icon: 'leaderboard', desc: 'Manage Leads', pathName: 'LeadIndex', count: leadCount},
         { label: 'Orders', icon: 'event', desc: 'Manage Orders', pathName: 'OrderIndex'},
-        { label: 'Settings', icon: 'settings', desc: 'Branch Settings', pathName: 'PaygateConfig'},
+        { label: 'Settings', icon: 'settings', desc: 'Branch Settings', pathName: 'BranchConfig'},
 
       ],
       menu2: [

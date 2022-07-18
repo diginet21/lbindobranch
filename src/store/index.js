@@ -36,21 +36,28 @@ export default store(function (/* { ssrContext } */) {
       loading: false,
       drawer: true,
       site_setting: null,
-      branch: null
+      branch: null,
+      cities: []
     },
     actions: {
       getSite: ({ commit }) => {
         BaseApi().get('sites-setting').then((response) => {
           if(response.status == 200) {
-            commit('SET_SETTING', response.data.results)
+            commit('SET_SETTING', response.data.data)
+          }
+         })
+      },
+      getCities: ({ commit }) => {
+        BaseApi().get('getCities').then((response) => {
+          if(response.status == 200) {
+            commit('SET_CITIES', response.data.data)
           }
          })
       },
      getCurrentBranch({ commit }) {
-        Api().get('getCurrentBranch').then(response => {
+       Api().get('getCurrentBranch').then(response => {
           if(response.status == 200) {
-            console.log(response.data.results);
-            commit('SET_BRANCH', response.data.results)
+            commit('SET_BRANCH', response.data.data)
           }
         })
       }
@@ -58,6 +65,9 @@ export default store(function (/* { ssrContext } */) {
     mutations: {
       SET_ERROR: (state, payload) => {
         state.errors = payload
+      },
+      SET_CITIES: (state, payload) => {
+        state.cities = payload
       },
       CLEAR_ERROR: (state) => {
         state.errors = null
