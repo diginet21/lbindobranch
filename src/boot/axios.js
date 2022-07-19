@@ -65,6 +65,22 @@ export default boot(({ app, store }) => {
     // Do something with response error       
     return Promise.reject(error)
   })
+
+  mainApi.interceptors.request.use((config) => {
+
+    let branch = store.state.branch
+    
+    if(branch) {
+      // config.params = {...config.params, branch: branch }
+      // config.headers = {...config.headers, Branch_Id: branch.id }
+      config.headers['Branch-Id'] = branch.id ;
+    }
+    return config
+  
+  }, function (error) {
+    return Promise.reject(error);
+  })
+
   mainApi.interceptors.response.use(response => {
     return response
   }, error => {

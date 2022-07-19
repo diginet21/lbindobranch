@@ -28,7 +28,11 @@ export function filterData ({ commit }, payload) {
 }
 export function paginateData ({ commit }, payload) {
   commit('SET_LOADING', true, { root: true })
-  Api().get('/orders?skip='+ payload.skip + '&take=' + payload.take).then(response => {
+  let url = 'orders?'
+
+  url += setParams(payload)
+
+  Api().get(url).then(response => {
     if(response.status == 200) {
       commit('PAGINATE_DATA', response.data.data)
     }

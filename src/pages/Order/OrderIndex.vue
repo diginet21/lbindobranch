@@ -13,7 +13,7 @@ onMounted(() => {
   }
 })
 const getData = () => {
-  store.dispatch('order/getOrders');
+  store.dispatch('order/getOrders', formFilter);
 }
 const deleteItem = (item) => {
  Dialog.create({
@@ -141,7 +141,10 @@ const reset = () => {
           </thead>
           <tbody v-if="main_data.ready">
             <tr v-for="(item, index) in main_data.data" :key="index">
-              <td>{{ item.invoice_id }}</td>
+              <td>
+                <div>{{ item.invoice_id }}</div>
+                <div class="text-grey-8"> {{ item.created_at }}</div>
+              </td>
               <td>
                 <div>{{ item.customer_name }}</div>
                 <div>{{ item.customer_phone }}</div>

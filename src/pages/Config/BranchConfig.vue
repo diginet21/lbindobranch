@@ -22,7 +22,7 @@ onBeforeMount(() => {
     Api().get('getCurrentBranch').then(response => {
       if(response.status == 200) {
         store.commit('SET_BRANCH', response.data.data)
-        setData(response.data.data)
+        // setData(response.data.data)
         Notify.create({
           type: 'positive',
           message: 'Berhasil memperbarui data'
@@ -79,6 +79,7 @@ const submit = () => {
 };
 
 const filteredKey = ref("");
+
 const filteredCityOptions = computed(() => {
   if (filteredKey.value.length) {
     return cityOptions.value.filter(
