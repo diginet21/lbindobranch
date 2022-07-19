@@ -103,11 +103,17 @@ export default boot(({ app, store }) => {
             // errors = error.response.data.message
             store.commit('SET_ERROR', error.response.data.errors)
 
-            let errors = error.response.data.errors;
+            let theErrors = error.response.data.errors;
 
-            if(errors.length) {
+            let err = []
+            
+            for(let e in theErrors) {
+              err.push(theErrors[e])
+            }
 
-              let firstError = response.data.errors[0]
+            if(err.length > 0) {
+
+              let firstError = err[0]
   
               Notify.create({
                 type: 'negative',
