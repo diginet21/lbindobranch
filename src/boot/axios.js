@@ -102,6 +102,19 @@ export default boot(({ app, store }) => {
         if (error.response.status == 422) {
             // errors = error.response.data.message
             store.commit('SET_ERROR', error.response.data.errors)
+
+            let errors = error.response.data.errors;
+
+            if(errors.length) {
+
+              let firstError = response.data.errors[0]
+  
+              Notify.create({
+                type: 'negative',
+                message: firstError[0]
+              })
+            }
+
         }
   
     } else {

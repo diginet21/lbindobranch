@@ -32,9 +32,8 @@ const form = reactive({
 // store.commit('SET_DRAWER', false)
 
 const submit = () => {
-    store.dispatch('post/postStore', form)
-
-  }
+  store.dispatch('post/postStore', form)
+}
 
 const imagePreview = ref('')
 
