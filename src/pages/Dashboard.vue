@@ -187,7 +187,7 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody v-if="currentLeads.length">
+              <tbody>
                 <tr v-for="(item, ind) in currentLeads" :key="item.id">
                   <td>{{ ind+1 }}</td>
                   <td>{{ item.customer_name }}</td>
