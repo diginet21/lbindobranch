@@ -133,39 +133,39 @@
           <div class="card-title">
             <h3>Recent Orders</h3>
           </div>
-          <q-list separator>
-            <q-item>
-              <q-item-section>
-                <q-item-label class="text-weight-bold">Detail</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-weight-bold">Type</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="text-weight-bold">Status</q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <q-item-label>Created</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item v-for="item in currentOrder" :key="item.id">
-              <!-- {{ item }} -->
-              <q-item-section>
-                <q-item-label>{{ item.invoice_id }}</q-item-label>
-              </q-item-section>
-              <q-item-section>
-                <div class="text-uppercase">{{ item.order_type.split('_')[0] }}</div>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ item.order_status }}</q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <q-item-label>{{ item.created_at }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-           <div class="q-py-lg text-center" v-if="!orders.available">
-            Tidak ada data
+           <div class="table-responsive">
+            <table class="table striped">
+              <thead>
+              <tr>
+                <th>#Invoice</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Type</th>
+                <th>Status</th>
+              </tr>
+              </thead>
+              <tbody v-if="currentOrder.length">
+                <tr v-for="(item, index) in currentOrder" :key="index">
+                  <td>
+                    <div>{{ item.invoice_id }}</div>
+                    <div class="text-grey-8"> {{ item.created_at }}</div>
+                  </td>
+                  <td>
+                    <div>{{ item.customer_name }}</div>
+                    <div>{{ item.customer_phone }}</div>
+                  </td>
+                  <td>{{ $moneyIdr(item.order_total) }}</td>
+                  <td>
+                    <div class="text-uppercase">{{ item.order_type.split('_')[0] }}</div>
+                  </td>
+                  <td>{{ item.order_status }}</td>
+                </tr>
+                <tr v-if="!orders.available">
+                  <td colspan="6" >
+                    <div class="text-center q-pa-xs">No data found</div></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </q-card-section>
       </q-card>
@@ -175,18 +175,40 @@
           <div class="card-title">
             <h3>Recent Leads</h3>
           </div>
-           <q-list separator>
-            <q-item v-for="item in currentLeads" :key="item.id">
-              <q-item-section>
-                <q-item-label>{{ item }}</q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <q-item-label>{{ item }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-          <div class="q-py-lg text-center" v-if="!leads.available">
-            Tidak ada data
+           <div class="table-responsive">
+            <table class="table striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody v-if="currentLeads.length">
+                <tr v-for="(item, ind) in currentLeads" :key="item.id">
+                  <td>{{ ind+1 }}</td>
+                  <td>{{ item.customer_name }}</td>
+                  <td>{{ item.customer_phone }}</td>
+                  <td>{{ item.lead_type }}</td> 
+                  <td>
+                    <q-badge color="teal">{{ item.status? item.status.label : 'New' }}</q-badge>
+                  </td>
+                  <td>
+                    <div class="q-gutter-sm">
+                      <!-- <q-btn round icon="view_list" size="sm" color="blue" unelevated @click="selectLead(item)"></q-btn> -->
+                      <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'LeadEdit', params: { id: item.id } }"></q-btn>
+                    </div>
+                  </td>
+                </tr>
+                <tr v-if="!leads.available">
+                  <td colspan="6" >
+                    <div class="text-center q-pa-xs">No data found</div></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </q-card-section>
       </q-card>
