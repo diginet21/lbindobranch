@@ -135,6 +135,11 @@ table.table.striped {
       }
     }
   }
+  tfoot > tr{
+    > th, > td {
+      padding: 8px;
+    }
+  }
 }
 .overflow-x-auto {
   overflow-x: auto;

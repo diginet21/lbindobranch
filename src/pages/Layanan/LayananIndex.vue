@@ -17,10 +17,6 @@ onMounted(() => {
   }
 })
 
-const toMoney = (numb) => {
-  return 'Rp '+ numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
 const deleteItem = (item) => {
  Dialog.create({
     title: 'Yakin Akan menghapus data?',
@@ -69,8 +65,8 @@ const paginateData = () => {
             <tr v-for="(item, ind) in main_data.data" :key="ind">
               <td>{{ ind+1 }}</td>
               <td>{{ item.title }}</td>
-              <td>{{ toMoney(item.default_price) }}</td>
-              <td>{{ toMoney(item.sell_price) }}</td>
+              <td>{{ $moneyIdr(item.default_price) }}</td>
+              <td>{{ $moneyIdr(item.sell_price) }}</td>
               <td>
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(item)"></q-btn>

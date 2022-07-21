@@ -37,7 +37,7 @@ const deleteItem = (item) => {
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
-        <q-breadcrumbs-el label="Event" />
+        <q-breadcrumbs-el label="Events" />
       </q-breadcrumbs>
     </div>
      <div class="card-column">

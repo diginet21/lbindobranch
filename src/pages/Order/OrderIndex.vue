@@ -68,7 +68,7 @@ const reset = () => {
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
-        <q-breadcrumbs-el label="Order" />
+        <q-breadcrumbs-el label="Orders" />
       </q-breadcrumbs>
     </div>
     <q-form class="col"
@@ -149,7 +149,7 @@ const reset = () => {
                 <div>{{ item.customer_name }}</div>
                 <div>{{ item.customer_phone }}</div>
               </td>
-              <td>{{ $money(item.order_total) }}</td>
+              <td>{{ $moneyIdr(item.order_total) }}</td>
               <td>
                 <div class="text-uppercase">{{ item.order_type.split('_')[0] }}</div>
               </td>

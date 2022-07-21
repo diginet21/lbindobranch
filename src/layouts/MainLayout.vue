@@ -71,7 +71,7 @@
                 <q-item-label header>Navigation</q-item-label>
               </q-item-section>
               <q-item-section side>
-                <q-toggle v-model="drawerIsDark" left-label label="Dark" size="sm" color="blue"></q-toggle>
+                <q-icon :name="drawerIsDark ? 'light_mode' : 'dark_mode'" @click="drawerIsDark = !drawerIsDark" class="cursor-pointer"></q-icon>
               </q-item-section>
             </q-item>
             <template v-for="menu in expansionMenu" :key="menu.label">
@@ -83,8 +83,8 @@
                   <q-item-label>{{ menu.label }}</q-item-label>
                   <q-item-label caption>{{ menu.desc }}</q-item-label>
                 </q-item-section>
-                <q-item-section v-if="menu.count && menu.count > 0" side top>
-                  <q-badge color="amber">New {{ menu.count }}</q-badge>
+                <q-item-section v-if="menu.count" side top>
+                  <q-badge v-if="menu.count > 0" color="yellow" text-color="dark">{{ menu.count }}</q-badge>
                 </q-item-section>
             </q-item>
             <q-expansion-item  
@@ -111,7 +111,7 @@
                   </q-item-section>
                 </q-item>
               </q-list>
-              </q-expansion-item>
+            </q-expansion-item>
             </template>
 
           </q-list>
@@ -172,17 +172,8 @@ export default defineComponent({
 
     })
 
-    return {
-      drawerIsDark,
-      sites,
-      logout,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      },
-      isLogin: computed(() => store.state.user.isLogin),
-
-      expansionMenu : [
+    const expansionMenu =  computed(() => {
+      return [
         { pathName: 'Dashboard', label: 'Dashboard', icon: 'other_houses', desc: 'Dashboard'},
         { label: 'Vehicles', group: 'menu', icon: 'directions_car', desc: 'Manage Vehicle', pathName: 'Vehicles' },
         { label: 'Spareparts', group: 'menu', icon: 'space_dashboard', desc: 'Manage Sparepart',  pathName: 'PartIndex'},
@@ -191,11 +182,24 @@ export default defineComponent({
         { label: 'Banner', icon: 'view_carousel', desc: 'Manage Banner', pathName: 'BannerIndex'},
         
         { label: 'Events', icon: 'event', desc: 'Manage Events', pathName: 'EventIndex'},
-        { label: 'Leads', icon: 'leaderboard', desc: 'Manage Leads', pathName: 'LeadIndex', count: leadCount},
+        { label: 'Leads', icon: 'leaderboard', desc: 'Manage Leads', pathName: 'LeadIndex', count: leadCount.value},
         { label: 'Orders', icon: 'event', desc: 'Manage Orders', pathName: 'OrderIndex'},
         { label: 'Settings', icon: 'settings', desc: 'Branch Settings', pathName: 'BranchConfig'},
 
-      ],
+      ]
+    })
+
+    return {
+      drawerIsDark,
+      sites,
+      logout,
+      leadCount,
+      leftDrawerOpen,
+      toggleLeftDrawer () {
+        leftDrawerOpen.value = !leftDrawerOpen.value
+      },
+      isLogin: computed(() => store.state.user.isLogin),
+      expansionMenu,
       menu2: [
         { path: '/auth/register', label: 'Register', icon: 'logout', desc: 'Register'},
         { path: '/auth/login', label: 'Login', icon: 'login', desc: 'Login'},

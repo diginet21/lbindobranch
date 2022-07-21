@@ -81,7 +81,7 @@ const submit = () => {
             </template>
           </q-input> -->
           <div class="row justify-between items-center">
-            <div class="row q-gutter-x-md q-pa-md"><span class="">Status</span> <div class="q-px-md bg-green rounded-borders text-white">{{ statusSelected ? statusSelected.label : '-' }}</div></div>
+            <div class="row q-gutter-x-md q-pa-md"><span class="">Status</span> <div class="q-px-md bg-green rounded-borders text-white">{{ statusSelected ? statusSelected.label : 'New' }}</div></div>
             <q-btn label="Edit Status" color="blue" size="sm" unelevated @click="modal = true"></q-btn>
           </div>
           <q-input required filled type="textarea" v-model="form.description" label="Description"></q-input>

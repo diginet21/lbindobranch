@@ -31,9 +31,6 @@ const deleteItem = (item) => {
   })
 }
 
-const toMoney = (numb) => {
-  return 'Rp '+ numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
 const loading = computed(() => store.state.loading)
 
 const paginateData = () => {
@@ -77,10 +74,10 @@ const paginateData = () => {
                 <q-img v-if="item.assets.length" :src="item.assets[0].src" :ratio="1" width="60px" fit="contain"></q-img>
               </td>
               <td>{{ item.title }}</td>
-              <td>{{ toMoney(item.default_price) }}</td>
-              <td>{{ toMoney(item.sell_price) }}</td>
+              <td>{{ $moneyIdr(item.default_price) }}</td>
+              <td>{{ $moneyIdr(item.sell_price) }}</td>
               <td>
-                <div>{{ item.dp_type == 'Percent' ? item.dp_amount +'%' : toMoney(item.dp_amount) }}</div>
+                <div>{{ item.dp_type == 'Percent' ? item.dp_amount +'%' : $moneyIdr(item.dp_amount) }}</div>
               </td>
               <td>
                 <div class="q-gutter-sm">

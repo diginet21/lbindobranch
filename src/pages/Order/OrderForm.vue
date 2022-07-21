@@ -111,7 +111,7 @@ const submit = () => {
             </tr>
             <tr>
               <td colspan="3">Total</td>
-              <td>{{ $money(order.order_total) }}</td>
+              <td>{{ $moneyIdr(order.order_total) }}</td>
             </tr>
           </tfoot>
         </table>

@@ -17,10 +17,6 @@ onMounted(() => {
   }
 })
 
-const toMoney = (numb) => {
-  return 'Rp '+ numb.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
-
 const deleteItem = (item) => {
  Dialog.create({
     title: 'Yakin Akan menghapus data?',
@@ -73,8 +69,8 @@ const paginateData = () => {
                 <q-img v-if="part.assets.length" :src="part.assets[0].src" :ratio="1" width="60px" fit="contain"></q-img>
               </td>
               <td>{{ part.title }}</td>
-              <td>{{ toMoney(part.default_price) }}</td>
-              <td>{{ toMoney(part.sell_price) }}</td>
+              <td>{{ $moneyIdr(part.default_price) }}</td>
+              <td>{{ $moneyIdr(part.sell_price) }}</td>
               <td>
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(part)"></q-btn>

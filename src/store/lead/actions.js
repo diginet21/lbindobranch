@@ -8,6 +8,7 @@ export function update ({ dispatch, commit }, payload) {
   commit('SET_LOADING', true, { root: true})
   Api().post('/leads/' + payload.id, payload).then(() => {
     dispatch('getAll')
+    dispatch('getNewLeadCount')
     this.$router.push({ name: 'LeadIndex'})
 
   }).finally(() =>  commit('SET_LOADING', false, { root: true}))

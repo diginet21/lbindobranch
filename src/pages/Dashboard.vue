@@ -50,11 +50,24 @@
       console.log(val);
     }
   })
-  const copyUrl = () => {
-    copyToClipboard(branchLink.value).then(() => {
+  const callbackUrl = computed({
+    get() {
+      let main_url = branch.value.main_url
+      if(branch.value) {
+        main_url += `/api/tripay/callback?bid=${branch.value.id}`
+      }
+  
+      return main_url;
+    },
+    set(val) {
+      console.log(val);
+    }
+  })
+  const copyUrl = (url) => {
+    copyToClipboard(url).then(() => {
       Notify.create({
         type: 'positive',
-        message: 'Berhasil menyalin link',
+        message: 'Berhasil menyalin alamat url',
         timeout: 700
       })
     })
@@ -66,7 +79,7 @@
       <div class="title">Dashboard</div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
-        <q-breadcrumbs-el label="Account" />
+        <q-breadcrumbs-el label="Home" />
       </q-breadcrumbs>
     </div>
     <div class="q-my-md">
@@ -97,7 +110,19 @@
           </div>
           <q-input readonly v-model="branchLink" outlined>
             <template v-slot:prepend>
-              <q-btn icon="content_copy" flat dense @click="copyUrl"></q-btn>
+              <q-btn icon="content_copy" flat dense @click="copyUrl(branchLink)"></q-btn>
+            </template>
+          </q-input>
+        </q-card-section>
+      </q-card>
+      <q-card class="box-shadow q-mt-lg">
+        <q-card-section>
+          <div class="card-title">
+            <h3>Tripay Callback Url</h3>
+          </div>
+          <q-input readonly v-model="callbackUrl" outlined>
+            <template v-slot:prepend>
+              <q-btn icon="content_copy" flat dense @click="copyUrl(callbackUrl)"></q-btn>
             </template>
           </q-input>
         </q-card-section>
