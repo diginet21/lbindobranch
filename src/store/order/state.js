@@ -10,6 +10,6 @@ export default function () {
       total: 0,
       loading: false
     },
-    order_status: ['BOOKING','PENDING', 'PROCESSED', 'COMPLETED', 'CANCELED']
+    order_status: ['ALL', 'BOOKING','PENDING', 'PROCESSED', 'COMPLETED', 'CANCELED']
   }
 }

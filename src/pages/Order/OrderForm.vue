@@ -27,8 +27,8 @@ const setData = (order) => {
   form.order_tax = order.order_tax
   form.shipping_cost = order.shipping_cost
   form.order_subtotal = order.order_subtotal
-  form.additional_cost_amount = order.additional_cost_amount
-  form.additional_cost_description = order.additional_cost_description
+  form.additional_cost_amount = order.additional_cost_amount ? order.additional_cost_amount : ''
+  form.additional_cost_description = order.additional_cost_description ? order.additional_cost_description : ''
 }
 
 const form = reactive({
