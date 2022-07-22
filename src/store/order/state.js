@@ -7,7 +7,9 @@ export default function () {
       skip: 0,
       available: true,
       ready: false,
-      total: 0
+      total: 0,
+      loading: false
     },
+    order_status: ['BOOKING','PENDING', 'PROCESSED', 'COMPLETED', 'CANCELED']
   }
 }

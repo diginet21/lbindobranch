@@ -32,7 +32,8 @@ const formFilter = reactive({
   branch_id: '',
   limit: 5,
   start: '',
-  end: ''
+  end: '',
+  status: ''
 })
 
 const paginateData = () => {
@@ -52,8 +53,12 @@ const reset = () => {
   formFilter.branch_id = ''
   formFilter.start = ''
   formFilter.end = ''
+  formFilter.limit = 5
+  formFilter.status = ''
   getData()
 }
+const orderStatus = computed(() => store.state.order.order_status)
+
 </script>
 
 <template>
@@ -109,12 +114,24 @@ const reset = () => {
           v-model="formFilter.limit">
           </q-select>
         </div>
+        <div class="col">
+          <q-select
+            required
+            filled
+            stack-label
+            square
+            dense
+            label="Order Status"
+            :options="orderStatus"
+            v-model="formFilter.status">
+          </q-select>
+        </div>
         <q-btn
           type="submit"
           label="Filter"
           unelevated
           color="dark"
-          :disable="loading"
+          :loading="loading"
         ></q-btn>
         <q-btn
           type="button"
@@ -151,7 +168,7 @@ const reset = () => {
               </td>
               <td>{{ $moneyIdr(item.order_total) }}</td>
               <td>
-                <div class="text-uppercase">{{ item.order_type.split('_')[0] }}</div>
+                <div class="text-uppercase">{{ item.order_type.split('_').join(' ') }}</div>
               </td>
               <td>{{ item.order_status }}</td>
               <td>
@@ -172,7 +189,7 @@ const reset = () => {
         </div>
     </div>
       <div class="q-pa-md text-center" v-if="main_data.count > main_data.data.length">
-        <q-btn :loading="loading" label="Loadmore.." outline size="md" color="primary" no-caps @click="paginateData"></q-btn>
+        <q-btn :loading="main_data.loading" label="Loadmore.." outline size="md" color="primary" no-caps @click="paginateData"></q-btn>
       </div>
   </q-page>
 </template>

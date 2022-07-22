@@ -19,6 +19,7 @@ import order from './order'
 import banner from './banner'
 import layanan from './layanan'
 import config from './config'
+import state from './user/state';
 
 /*
  * If not building with SSR mode, you can
@@ -37,7 +38,8 @@ export default store(function (/* { ssrContext } */) {
       drawer: true,
       site_setting: null,
       branch: null,
-      cities: []
+      cities: [],
+      paginate_loading: false
     },
     actions: {
       getSite: ({ commit }) => {
@@ -86,6 +88,9 @@ export default store(function (/* { ssrContext } */) {
       },
       SET_BRANCH: ( state, payload) => {
         state.branch = payload
+      },
+      SET_PAGINATE_LOADING: (state, status) => {
+        state.paginate_loading = status
       }
     },
     modules: {
