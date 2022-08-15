@@ -48,7 +48,6 @@ const title = "Branch Setting";
 const form = reactive({
   id: "",
   name: "",
-  coverage_areas: [],
   phone: "",
   email: "",
   address: "",
@@ -58,9 +57,6 @@ const form = reactive({
 const setData = (branch) => {
   form.id = branch.id;
   form.name = branch.name;
-  form.coverage_areas = branch.coverage_areas.length
-    ? branch.coverage_areas.map((e) => e.id)
-    : [];
   form.phone = branch.phone;
   form.email = branch.email;
   form.address = branch.address;
@@ -168,26 +164,6 @@ const selectSubdistrict = (item) => {
             </div>
           </div>
         </div>
-
-        <q-select
-          v-model="form.coverage_areas"
-          label="Covearge Area ( multiple )"
-          :options="filteredCityOptions"
-          emit-value
-          map-options
-          use-input
-          multiple
-          use-chips
-          filled
-          placeholder="Ketik kota / kabupaten"
-          @filter="filterCity"
-        >
-          <template v-slot:no-option>
-            <q-item>
-              <q-item-section class="text-grey"> No results </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
 
         <div class="flex justify-end q-gutter-x-sm q-mt-lg">
           <q-btn

@@ -60,9 +60,6 @@ const additional_cost_helper = computed({
   }
 })
 
-// watch(() => additional_cost_helper.value, (val) => {
-//   form.additional_cost_amount = val.split('.').join('')
-// })
 
 const ppnTotal = computed(() => {
   return parseInt(form.order_subtotal)*parseInt(form.order_tax)/100
@@ -164,6 +161,11 @@ const statusOrdeOptions = computed(() => store.state.order.order_status)
               <td>Rp</td>
               <td>{{ $money(order.order_subtotal) }}</td>
             </tr>
+            <tr>
+              <td>Tax ({{order.order_tax}}%)</td>
+              <td>Rp</td>
+              <td>{{ $money(ppnTotal) }}</td>
+            </tr>
             <tr v-if="order.shipping_cost">
               <td>Ongkos Kirim</td>
               <td>Rp</td>
@@ -184,11 +186,6 @@ const statusOrdeOptions = computed(() => store.state.order.order_status)
             </tr>
           </table>
           <table class="table dense bolder q-mt-md align-right">
-            <tr>
-              <td>Tax ({{order.order_tax}}%)</td>
-              <td>Rp</td>
-              <td>{{ $money(ppnTotal) }}</td>
-            </tr>
             <tr>
               <td>Grand Total</td>
               <td>Rp</td>
