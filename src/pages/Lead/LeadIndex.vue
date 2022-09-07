@@ -183,6 +183,7 @@ const reset = () => {
           <thead>
             <tr>
               <th>#</th>
+              <th>Created</th>
               <th>Name</th>
               <th>Phone</th>
               <th>Type</th>
@@ -194,6 +195,7 @@ const reset = () => {
             <tr v-for="(item, ind) in main_data.data" :key="item.id">
               <td>{{ ind+1 }}</td>
               <td>{{ item.customer_name }}</td>
+              <td>{{ item.created_at }}</td>
               <td>{{ item.customer_phone }}</td>
               <td>{{ item.lead_type }}</td> 
               <td>
