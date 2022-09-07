@@ -149,6 +149,7 @@ const orderStatus = computed(() => store.state.order.order_status)
           <thead>
            <tr>
             <th>#Invoice</th>
+            <th>Created</th>
             <th>Customer</th>
             <th>Total</th>
             <th>Type</th>
@@ -160,8 +161,8 @@ const orderStatus = computed(() => store.state.order.order_status)
             <tr v-for="(item, index) in main_data.data" :key="index">
               <td>
                 <div>{{ item.invoice_id }}</div>
-                <div class="text-grey-8"> {{ item.created_at }}</div>
               </td>
+              <td>{{ item.created_at }}</td>
               <td>
                 <div>{{ item.customer_name }}</div>
                 <div>{{ item.customer_phone }}</div>
