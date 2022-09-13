@@ -27,6 +27,12 @@ export function update({dispatch}, payload) {
     })
   }).finally(() => Loading.hide())
 }
+export function process({dispatch}, id) {
+ return Api().post('processOrder/' + id)
+}
+export function inputResi({dispatch}, payload) {
+  return Api().post('inputResi', payload)
+}
 export function filterData ({ commit }, payload) {
   commit('SET_LOADING', true, { root: true })
   let url = 'orders'

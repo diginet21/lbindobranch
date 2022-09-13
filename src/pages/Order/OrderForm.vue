@@ -1,8 +1,9 @@
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
-import { Dialog } from 'quasar'
+import { Dialog, Notify } from 'quasar'
 import { useRoute } from 'vue-router'
+import { Api } from 'boot/axios'
 
 const store = useStore()
 const route = useRoute()
@@ -15,6 +16,8 @@ const getData = () => {
     }
   })
 }
+
+const invoiceNumber = ref('')
 
 const setData = (order) => {
   form.id = order.id
@@ -29,6 +32,8 @@ const setData = (order) => {
   form.order_subtotal = order.order_subtotal
   form.additional_cost_amount = order.additional_cost_amount ? order.additional_cost_amount : ''
   form.additional_cost_description = order.additional_cost_description ? order.additional_cost_description : ''
+
+  invoiceNumber.value = order.invoice_id
 }
 
 const form = reactive({
@@ -84,20 +89,63 @@ const submit = () => {
 
 const statusOrdeOptions = computed(() => store.state.order.order_status)
 
+const handleProcessOrder = () => {
+  Dialog.create({
+    title: 'Konfirmasi',
+    message: 'Ini akan merubah status pesanan menjadi "PROCESS"',
+    cancel: true
+  }).onOk(() => {
+    processOrder()
+  })
+}
+
+const processOrder = () => {
+   store.dispatch('order/process', order.value.id).then(() => {
+    getData()
+    Notify.create({
+      type: 'positive',
+      message: 'Order has been successfully updated',
+      position: 'top-right'
+    })
+    store.dispatch('order/getOrders')
+  })
+}
+const resiModal = ref(false)
+
+const resiNumber =ref('')
+
+const handleInputResi = () => {
+  resiModal.value = true
+}
+const submitResi = () => {
+  resiModal.value = false
+  store.dispatch('order/inputResi', { order_id: order.value.id, resi_code: resiNumber.value }).then(() => {
+    getData()
+    Notify.create({
+      type: 'positive',
+      message: 'Order has been successfully updated',
+      position: 'top-right'
+    })
+    store.dispatch('order/getOrders')
+  })
+}
 </script>
 
 <template>
   <q-page padding>
     <div class="q-py-sm">
       <div class="row items-center q-gutter-x-md">
-        <div class="title">Edit Order</div>
+        <div class="title">Edit Order {{ invoiceNumber }}</div>
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
         <q-breadcrumbs-el label="Order" />
       </q-breadcrumbs>
     </div>
-    <!-- {{ order }} -->
+    <div class="flex justify-end q-gutter-x-sm">
+      <q-btn @click="handleProcessOrder" color="primary" size="13px" label="Process Order"></q-btn>
+      <q-btn @click="handleInputResi" color="primary" size="13px" label="Input Resi"></q-btn>
+    </div>
     <div v-if="order">
       <div class="card-column q-pa-md">
         <div class="card-title">
@@ -152,9 +200,10 @@ const statusOrdeOptions = computed(() => store.state.order.order_status)
               <td>{{ $money(item.product_price) }}</td>
               <td>{{ $money(item.product_price*item.quantity) }}</td>
             </tr>
+            
           </tbody>
         </table>
-        <div class="column items-end q-mt-md">
+          <div class="column items-end q-mt-md">
           <table class="table dense bolder align-right">
             <tr>
               <td>Subtotal</td>
@@ -167,7 +216,7 @@ const statusOrdeOptions = computed(() => store.state.order.order_status)
               <td>{{ $money(ppnTotal) }}</td>
             </tr>
             <tr v-if="order.shipping_cost">
-              <td>Ongkos Kirim</td>
+              <td>Shipping Fee</td>
               <td>Rp</td>
               <td>{{ $money(order.shipping_cost) }}</td>
             </tr>
@@ -194,10 +243,51 @@ const statusOrdeOptions = computed(() => store.state.order.order_status)
           </table>
         </div>
       </div>  
+      <div class="card-column q-pa-md">
+        <div class="card-title">
+          <h2>Payments</h2>
+        </div>
+        <q-list v-for="payment in order.payments" :key="payment.id" separator class="q-mb-md">
+          <q-item>
+            <q-item-section>Reference</q-item-section>
+            <q-item-section>{{ payment.ref }}</q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>Method</q-item-section>
+            <q-item-section>{{ payment.method.split('_').join(' ') }}</q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>Type</q-item-section>
+            <q-item-section>{{ payment.payment_type }}</q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>Status</q-item-section>
+            <q-item-section>{{ payment.status }}</q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>Amount</q-item-section>
+            <q-item-section>Rp {{ $money(payment.amount) }}</q-item-section>
+          </q-item>
+        </q-list>
+      </div>
     </div>
     <div class="q-gutter-x-sm flex justify-end q-pa-lg">
       <q-btn label="Back" color="primary" outline :to="{ name: 'OrderIndex' }"></q-btn>
       <q-btn @click="submit" label="Update" color="primary" unelevated></q-btn>
     </div>
+    <q-dialog v-model="resiModal">
+       <q-card class="card-md">
+        <q-card-section>
+           <q-form @submit.prevent="submitResi">
+            <div class="text-md">Resi Number</div>
+            <q-input required v-model="resiNumber"></q-input>
+            <div class="q-mt-md q-gutter-x-sm flex justify-end">
+              <q-btn outline color="primary" label="Cancel" v-close-popup></q-btn>
+              <q-btn unelavated color="primary" type="submit" label="Submit"></q-btn>
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
