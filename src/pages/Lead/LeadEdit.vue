@@ -40,7 +40,6 @@ const getData = () => {
   })
 }
 
-
 onBeforeMount(() => {
   getData()
 })
@@ -71,6 +70,14 @@ const submit = () => {
     <div class="card-box card-xl">
       <q-form @submit.prevent="submit">
         <div class="q-gutter-y-sm">
+          <div class="row justify-between items-center">
+            <div class="row q-gutter-x-md q-py-md">
+              <div class="">Status</div> 
+              <q-badge :color="statusSelected ? statusSelected.color : 'orange'">{{ statusSelected ? statusSelected.label : 'New' }}
+              </q-badge>
+            </div>
+            <q-btn icon="edit" label="Edit Status" color="blue" size="sm" unelevated @click="modal = true"></q-btn>
+          </div>
           <q-input required filled label="Customer Name" v-model="form.customer_name"></q-input>
           <q-input required filled label="Customer Phone" v-model="form.customer_phone"></q-input>
           <q-input required filled label="Customer Email" v-model="form.customer_email"></q-input>
@@ -80,10 +87,6 @@ const submit = () => {
               <q-btn label="Select" @click.prevent="modal = true"></q-btn>
             </template>
           </q-input> -->
-          <div class="row justify-between items-center">
-            <div class="row q-gutter-x-md q-pa-md"><span class="">Status</span> <div class="q-px-md bg-green rounded-borders text-white">{{ statusSelected ? statusSelected.label : 'New' }}</div></div>
-            <q-btn label="Edit Status" color="blue" size="sm" unelevated @click="modal = true"></q-btn>
-          </div>
           <q-input required filled type="textarea" v-model="form.description" label="Description"></q-input>
         </div>
         <div class="q-mt-md flex justify-end q-gutter-x-md">
@@ -95,10 +98,11 @@ const submit = () => {
     <q-dialog v-model="modal">
       <q-card class="card-lg">
         <div class="card-title q-pa-md flex justify-between items-center bordered">
-          <h2>Select Status</h2>
+          <h3>Select Status</h3>
         </div>
+        <q-separator></q-separator>
         <q-list separator v-for="(item, index) in statuses" :key="index">
-          <q-expansion-item v-if="item.childs.length" expand-separator
+          <q-expansion-item v-if="item.childs.length" expand-separator separator
           :label="item.label"
           >
           <q-item @click="selectStatus(sub)" clickable v-for="sub in item.childs" :key="sub.id">

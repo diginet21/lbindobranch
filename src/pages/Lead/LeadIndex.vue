@@ -199,7 +199,7 @@ const reset = () => {
               <td>{{ item.customer_phone }}</td>
               <td>{{ item.lead_type }}</td> 
               <td>
-                <q-badge color="teal">{{ item.status? item.status.label : 'New' }}</q-badge>
+                <q-badge :color="item.status ? item.status.color : 'orange'">{{ item.status? item.status.label : 'New' }}</q-badge>
               </td>
               <td>
                 <div class="q-gutter-sm">

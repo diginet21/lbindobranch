@@ -30,6 +30,9 @@ export function update({dispatch}, payload) {
 export function process({dispatch}, id) {
  return Api().post('processOrder/' + id)
 }
+export function abort({dispatch}, id) {
+ return Api().post('abortOrder/' + id)
+}
 export function inputResi({dispatch}, payload) {
   return Api().post('inputResi', payload)
 }

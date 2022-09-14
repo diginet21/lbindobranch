@@ -110,6 +110,17 @@ const processOrder = () => {
     store.dispatch('order/getOrders')
   })
 }
+const handleAbortOrder = () => {
+   store.dispatch('order/abort', order.value.id).then(() => {
+    getData()
+    Notify.create({
+      type: 'positive',
+      message: 'Order has been successfully updated',
+      position: 'top-right'
+    })
+    store.dispatch('order/getOrders')
+  })
+}
 const resiModal = ref(false)
 
 const resiNumber =ref('')
@@ -143,8 +154,9 @@ const submitResi = () => {
       </q-breadcrumbs>
     </div>
     <div class="flex justify-end q-gutter-x-sm">
-      <q-btn @click="handleProcessOrder" color="primary" size="13px" label="Process Order"></q-btn>
-      <q-btn @click="handleInputResi" color="primary" size="13px" label="Input Resi"></q-btn>
+      <q-btn @click="handleProcessOrder" color="blue" size="13px" label="Process Order"></q-btn>
+      <q-btn @click="handleInputResi" color="purple" size="13px" label="Input Resi"></q-btn>
+      <q-btn @click="handleAbortOrder" color="red" size="13px" label="Cancel Order"></q-btn>
     </div>
     <div v-if="order">
       <div class="card-column q-pa-md">
@@ -203,45 +215,6 @@ const submitResi = () => {
             
           </tbody>
         </table>
-          <div class="column items-end q-mt-md">
-          <table class="table dense bolder align-right">
-            <tr>
-              <td>Subtotal</td>
-              <td>Rp</td>
-              <td>{{ $money(order.order_subtotal) }}</td>
-            </tr>
-            <tr>
-              <td>Tax ({{order.order_tax}}%)</td>
-              <td>Rp</td>
-              <td>{{ $money(ppnTotal) }}</td>
-            </tr>
-            <tr v-if="order.shipping_cost">
-              <td>Shipping Fee</td>
-              <td>Rp</td>
-              <td>{{ $money(order.shipping_cost) }}</td>
-            </tr>
-            <tr v-if="form.additional_cost_amount">
-              <td>
-                <div>Additional Cost</div>
-                <div class="text-caption" v-if="form.additional_cost_description">({{ form.additional_cost_description }})</div>
-              </td>
-              <td>Rp</td>
-              <td>{{ $money(form.additional_cost_amount) }}</td>
-            </tr>
-            <tr>
-              <td>Total Order</td>
-              <td>Rp</td>
-              <td>{{ $money(orderTotal) }}</td>
-            </tr>
-          </table>
-          <table class="table dense bolder q-mt-md align-right">
-            <tr>
-              <td>Grand Total</td>
-              <td>Rp</td>
-              <td>{{ $money(grandTotal) }}</td>
-            </tr>
-          </table>
-        </div>
       </div>  
       <div class="card-column q-pa-md">
         <div class="card-title">
@@ -269,6 +242,38 @@ const submitResi = () => {
             <q-item-section>Rp {{ $money(payment.amount) }}</q-item-section>
           </q-item>
         </q-list>
+         <div class="q-pt-lg">
+          <div class="text-md">Detil</div>
+          <q-list separator>
+            <q-item>
+              <q-item-section>Subtotal</q-item-section>
+              <q-item-section>Rp {{ $money(order.order_subtotal) }}</q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>Tax ({{order.order_tax}}%)</q-item-section>
+              <q-item-section>Rp {{ $money(ppnTotal) }}</q-item-section>
+            </q-item>
+            <q-item v-if="order.shipping_cost">
+              <q-item-section>Shipping Fee</q-item-section>
+              <q-item-section>Rp {{ $money(order.shipping_cost) }}</q-item-section>
+            </q-item>
+            <q-item v-if="form.additional_cost_amount">
+              <q-item-section>
+                <div>Additional Cost</div>
+                <div class="text-caption" v-if="form.additional_cost_description">({{ form.additional_cost_description }})</div>
+              </q-item-section>
+              <q-item-section>Rp {{ $money(form.additional_cost_amount) }}</q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>Total Order</q-item-section>
+              <q-item-section>Rp {{ $money(orderTotal) }}</q-item-section>
+            </q-item>
+            <q-item>
+              <q-item-section>Grand Total</q-item-section>
+              <q-item-section>Rp {{ $money(grandTotal) }}</q-item-section>
+            </q-item>
+          </q-list>
+        </div>
       </div>
     </div>
     <div class="q-gutter-x-sm flex justify-end q-pa-lg">
@@ -279,8 +284,8 @@ const submitResi = () => {
        <q-card class="card-md">
         <q-card-section>
            <q-form @submit.prevent="submitResi">
-            <div class="text-md">Resi Number</div>
-            <q-input required v-model="resiNumber"></q-input>
+            <div class="text-md q-mb-sm">Resi Number</div>
+            <q-input filled required v-model="resiNumber"></q-input>
             <div class="q-mt-md q-gutter-x-sm flex justify-end">
               <q-btn outline color="primary" label="Cancel" v-close-popup></q-btn>
               <q-btn unelavated color="primary" type="submit" label="Submit"></q-btn>
