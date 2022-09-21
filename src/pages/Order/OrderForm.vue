@@ -242,38 +242,6 @@ const submitResi = () => {
             <q-item-section>Rp {{ $money(payment.amount) }}</q-item-section>
           </q-item>
         </q-list>
-         <div class="q-pt-lg">
-          <div class="text-md">Detil</div>
-          <q-list separator>
-            <q-item>
-              <q-item-section>Subtotal</q-item-section>
-              <q-item-section>Rp {{ $money(order.order_subtotal) }}</q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>Tax ({{order.order_tax}}%)</q-item-section>
-              <q-item-section>Rp {{ $money(ppnTotal) }}</q-item-section>
-            </q-item>
-            <q-item v-if="order.shipping_cost">
-              <q-item-section>Shipping Fee</q-item-section>
-              <q-item-section>Rp {{ $money(order.shipping_cost) }}</q-item-section>
-            </q-item>
-            <q-item v-if="form.additional_cost_amount">
-              <q-item-section>
-                <div>Additional Cost</div>
-                <div class="text-caption" v-if="form.additional_cost_description">({{ form.additional_cost_description }})</div>
-              </q-item-section>
-              <q-item-section>Rp {{ $money(form.additional_cost_amount) }}</q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>Total Order</q-item-section>
-              <q-item-section>Rp {{ $money(orderTotal) }}</q-item-section>
-            </q-item>
-            <q-item>
-              <q-item-section>Grand Total</q-item-section>
-              <q-item-section>Rp {{ $money(grandTotal) }}</q-item-section>
-            </q-item>
-          </q-list>
-        </div>
       </div>
     </div>
     <div class="q-gutter-x-sm flex justify-end q-pa-lg">

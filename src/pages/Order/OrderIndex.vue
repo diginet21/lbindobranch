@@ -151,7 +151,6 @@ const orderStatus = computed(() => store.state.order.order_status)
             <th>#Invoice</th>
             <th>Created</th>
             <th>Customer</th>
-            <th>Total</th>
             <th>Type</th>
             <th>Status</th>
             <th>Action</th>
@@ -167,7 +166,6 @@ const orderStatus = computed(() => store.state.order.order_status)
                 <div>{{ item.customer_name }}</div>
                 <div>{{ item.customer_phone }}</div>
               </td>
-              <td>{{ $moneyIdr(item.order_total) }}</td>
               <td>
                 <div class="text-uppercase">{{ item.order_type.split('_').join(' ') }}</div>
               </td>
