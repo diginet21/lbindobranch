@@ -40,6 +40,14 @@ const dpType = ['Percent', 'Amount']
 
 const pricing = ref('')
 
+const selectProduct = (val) => {
+  let p = vehicle_master.value.find(h => h.id == val)
+
+  if(p) {
+    form.sell_price = p.price
+  }
+}
+
 </script>
 
 <template>
@@ -59,14 +67,14 @@ const pricing = ref('')
         <div class="col q-pa-sm">
           <div class="card-box">
             <div class="q-gutter-y-md">
-                <q-select filled required label="Select Vehicle" v-model="form.vehicle_id" :options="options" map-options emit-value></q-select>
+                <q-select filled required label="Select Vehicle" v-model="form.vehicle_id" :options="options" map-options emit-value @update:modelValue="selectProduct"></q-select>
                  <money-formatter v-model="form.sell_price" />
               <div class="row q-gutter-sm">
                 <div class="col">
                   <q-select filled required label="Down Payment Type" v-model="form.dp_type" :options="dpType" map-options emit-value></q-select>
                 </div>
                 <div class="col">
-                  <money-formatter required v-if="form.dp_type == 'Amount'" v-model="form.dp_amount" label="Down Payment Amount"/>
+                  <money-formatter filled required v-if="form.dp_type == 'Amount'" v-model="form.dp_amount" label="Down Payment Amount"/>
                   <q-input v-else filled required v-model="form.dp_amount" label="Down Payment Amount" mask="###"></q-input>
                 </div>
               </div>

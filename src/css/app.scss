@@ -40,6 +40,8 @@ h1,h2,h3,h4,h5,h6 {
   max-width: 640px;
 }
 .card-title {
+  display: flex;
+  align-items: center;
   padding-bottom: .8rem;
   h2 {
     font-size: 1.4rem;
@@ -50,6 +52,10 @@ h1,h2,h3,h4,h5,h6 {
     font-size: 1.1rem;
     font-weight: 600;
     margin:0;
+  }
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
   }
   .desc {
     padding-top:.5rem;

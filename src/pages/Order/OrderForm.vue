@@ -49,7 +49,7 @@ const form = reactive({
   additional_cost_amount: '',
   shipping_cost: '',
   additional_cost_description: '',
-  order_subtotal: '',
+  subtotal: 0
 })
 
 onMounted(() => getData())
@@ -65,7 +65,6 @@ const additional_cost_helper = computed({
   }
 })
 
-
 const ppnTotal = computed(() => {
   return parseInt(form.order_subtotal)*parseInt(form.order_tax)/100
 })
@@ -79,6 +78,7 @@ const additionalCost = computed(() => {
 const orderTotal = computed(() => {
   return order.value.order_subtotal + additionalCost.value + order.value.shipping_cost
 })
+
 const grandTotal = computed(() => {
   return orderTotal.value + ppnTotal.value
 })
@@ -87,7 +87,7 @@ const submit = () => {
   store.dispatch('order/update', form)
 }
 
-const statusOrdeOptions = computed(() => store.state.order.order_status)
+const statusOrdeOptions = computed(() => store.state.order.order_status_options)
 
 const handleProcessOrder = () => {
   Dialog.create({
@@ -140,13 +140,16 @@ const submitResi = () => {
     store.dispatch('order/getOrders')
   })
 }
+const orderModal = ref(false)
+const userModal = ref(false)
+
 </script>
 
 <template>
   <q-page padding>
     <div class="q-py-sm">
       <div class="row items-center q-gutter-x-md">
-        <div class="title">Edit Order {{ invoiceNumber }}</div>
+        <div class="title">Order {{ invoiceNumber }}</div>
       </div>
       <q-breadcrumbs class="text-grey" active-color="secondary">
         <q-breadcrumbs-el label="Dashboard"/>
@@ -159,40 +162,9 @@ const submitResi = () => {
       <q-btn @click="handleAbortOrder" color="red" size="13px" label="Cancel Order"></q-btn>
     </div>
     <div v-if="order">
-      <div class="card-column q-pa-md">
+       <div class="card-column q-pa-md">
         <div class="card-title">
-          <h2>Customer Info</h2>
-        </div>
-        <div class="q-gutter-y-sm">
-          <q-input filled label="Customer Name" v-model="form.customer_name"></q-input>
-          <q-input filled label="Customer Email" v-model="form.customer_email"></q-input>
-          <q-input filled label="Customer Phone " v-model="form.customer_phone"></q-input>
-          <q-input filled type="textarea" label="Customer Address" v-model="form.customer_address"></q-input>
-        </div>
-      </div>
-      <div class="card-column q-pa-md">
-        <div class="card-title">
-          <h2>Additional Cost</h2>
-        </div>
-        <div class="q-gutter-y-sm">
-           <money-formatter v-model="additional_cost_helper" label="Additional Cost Amount"/>
-          <q-input filled label="Additional Cost Description" v-model="form.additional_cost_description"></q-input>
-        </div>
-      </div>
-      <div class="card-column q-pa-md">
-        <div class="card-title">
-          <h2>Order Info</h2>
-        </div>
-        <div class="q-gutter-y-sm">
-          <q-input filled label="Order Tax" v-model="form.order_tax" suffix="%"></q-input>
-          <q-input filled label="Shipping Cost" v-model="form.shipping_cost"></q-input>
-          <q-select filled v-model="form.order_status" label="Order Status" :options="statusOrdeOptions"></q-select>
-          <q-input filled type="textarea" v-model="form.order_note" label="Order Note"></q-input>
-        </div>
-      </div>
-      <div class="card-column q-pa-md">
-        <div class="card-title">
-          <h2>Order Items</h2>
+          <h2>Products</h2>
         </div>
         <table class="table striped">
             <thead>
@@ -200,7 +172,7 @@ const submitResi = () => {
               <th>Description</th>
               <th>Qty</th>
               <th>Price</th>
-              <th>Subtotal</th>
+              <th>Amount</th>
             </tr>
           </thead>
           <tbody>
@@ -209,39 +181,125 @@ const submitResi = () => {
                 {{ item.product_name }}
               </td>
               <td>{{ item.quantity }}</td>
-              <td>{{ $money(item.product_price) }}</td>
-              <td>{{ $money(item.product_price*item.quantity) }}</td>
+              <td>IDR {{ $money(item.product_price) }}</td>
+              <td>IDR {{ $money(item.product_price*item.quantity) }}</td>
             </tr>
             
           </tbody>
         </table>
-      </div>  
+      </div> 
       <div class="card-column q-pa-md">
-        <div class="card-title">
-          <h2>Payments</h2>
+        <div class="card-title justify-between">
+          <h2>Order Info</h2>
+          <!-- <q-btn label="Edit" @click="orderModal = true"></q-btn> -->
         </div>
-        <q-list v-for="payment in order.payments" :key="payment.id" separator class="q-mb-md">
+        <q-list separator>
           <q-item>
-            <q-item-section>Reference</q-item-section>
-            <q-item-section>{{ payment.ref }}</q-item-section>
-          </q-item>
-          <q-item>
-            <q-item-section>Method</q-item-section>
-            <q-item-section>{{ payment.method.split('_').join(' ') }}</q-item-section>
+            <q-item-section>INVOICE</q-item-section>
+            <q-item-section>{{ order.invoice_id }}</q-item-section>
           </q-item>
           <q-item>
             <q-item-section>Type</q-item-section>
-            <q-item-section>{{ payment.payment_type }}</q-item-section>
+            <q-item-section class="text-uppercase">{{ order.order_type.split('_').join(' ') }}</q-item-section>
           </q-item>
           <q-item>
             <q-item-section>Status</q-item-section>
-            <q-item-section>{{ payment.status }}</q-item-section>
+            <q-item-section>{{ order.order_status }}</q-item-section>
           </q-item>
           <q-item>
-            <q-item-section>Amount</q-item-section>
-            <q-item-section>Rp {{ $money(payment.amount) }}</q-item-section>
+            <q-item-section>Subtotal</q-item-section>
+            <q-item-section>IDR {{ $money(form.order_subtotal) }}</q-item-section>
+          </q-item>
+          <q-item v-if="order.order_discount">
+            <q-item-section>Discount</q-item-section>
+            <q-item-section>{{ form.order_discount }}</q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>Shipping Cost</q-item-section>
+            <q-item-section>IDR {{ $money(form.shipping_cost) }}</q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>Tax Total</q-item-section>
+            <q-item-section>IDR {{ ppnTotal }}</q-item-section>
+          </q-item>
+          <q-item>
+            <q-item-section>Order Total</q-item-section>
+            <q-item-section>IDR {{ $money(grandTotal) }}</q-item-section>
           </q-item>
         </q-list>
+        <q-dialog v-model="orderModal">
+          <q-card class="card-md">
+            <div class="card-title q-pa-md">
+              <h4>Edit Order</h4>
+              <q-btn flat icon="close" dense v-close-popup></q-btn>
+            </div>
+            <q-card-section>
+              <div class="q-gutter-y-sm">
+                <q-select v-model="form.order_status" label="Order Status" :options="statusOrdeOptions"></q-select>
+                <q-input label="Order Tax" v-model="form.order_tax" suffix="%"></q-input>
+                <q-input label="Shipping Cost" v-model="form.shipping_cost"></q-input>
+                <q-input type="textarea" v-model="form.order_note" label="Order Note"></q-input>
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+      </div>
+     
+      <div class="card-column q-pa-md">
+        <div class="card-title justify-between">
+          <h2>Customer Info</h2>
+        </div>
+        <div class="q-gutter-y-sm">
+          <q-input label="Customer Name" v-model="form.customer_name"></q-input>
+          <q-input label="Customer Email" v-model="form.customer_email"></q-input>
+          <q-input label="Customer Phone " v-model="form.customer_phone"></q-input>
+          <q-input type="textarea" label="Customer Address" v-model="form.customer_address"></q-input>
+        </div>
+      </div>
+      <!-- <div class="card-column q-pa-md">
+        <div class="card-title">
+          <h2>Additional Cost</h2>
+        </div>
+        <div class="q-gutter-y-sm">
+           <money-formatter v-model="additional_cost_helper" label="Additional Cost Amount"/>
+          <q-input label="Additional Cost Description" v-model="form.additional_cost_description"></q-input>
+        </div>
+      </div> -->
+      
+      <div class="card-column q-pa-md">
+        <div class="card-title">
+          <h2>Invoices ( {{ order.payments.length }} )</h2>
+        </div>
+        <div v-for="payment in order.payments" :key="payment.id" class="q-mb-md">
+          <div class="q-pa-xs">
+            <q-list separator bordered>
+              <q-item>
+                <q-item-section>Reference</q-item-section>
+                <q-item-section>{{ payment.ref }}</q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>Method</q-item-section>
+                <q-item-section>{{ payment.method.split('_').join(' ') }} - {{ payment.name }}</q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>Type</q-item-section>
+                <q-item-section>{{ payment.payment_type }} </q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>Status</q-item-section>
+                <q-item-section>{{ payment.status }}</q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>Customer Fee</q-item-section>
+                <q-item-section>IDR {{ $money(payment.payment_fee) }}</q-item-section>
+              </q-item>
+              <q-item>
+                <q-item-section>Total Amount</q-item-section>
+                <q-item-section>IDR {{ $money(payment.amount) }}</q-item-section>
+              </q-item>
+            </q-list>
+          </div>
+        </div>
       </div>
     </div>
     <div class="q-gutter-x-sm flex justify-end q-pa-lg">

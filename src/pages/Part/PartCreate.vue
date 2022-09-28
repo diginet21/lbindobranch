@@ -67,6 +67,15 @@ const removeImage = (index) => {
   form.images.splice(index, 1)
 }
 
+const selectProduct = (val) => {
+  let p = partsMaster.value.find(h => h.id == val)
+
+  if(p) {
+    form.sell_price = p.price
+  }
+}
+
+
 </script>
 
 <template>
@@ -86,7 +95,7 @@ const removeImage = (index) => {
         <div class="col q-pa-sm">
           <div class="card-box block-container">
             <div class="q-gutter-y-md">
-              <q-select filled v-model="form.sparepart_id" :options="partAllOptions" label="Select Sparepart" map-options emit-value></q-select>
+              <q-select filled v-model="form.sparepart_id" :options="partAllOptions" label="Select Sparepart" map-options emit-value @update:modelValue="selectProduct"></q-select>
              <money-formatter v-model="form.sell_price" label="Sell Price"/>
             </div>
           <div class="submit-block">

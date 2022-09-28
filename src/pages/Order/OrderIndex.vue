@@ -172,7 +172,7 @@ const orderStatus = computed(() => store.state.order.order_status)
               <td>{{ item.order_status }}</td>
               <td>
                 <div class="q-gutter-sm">
-                  <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'OrderEdit', params: { id: item.id }}"></q-btn>
+                  <q-btn size="sm" color="blue" unelevated :to="{ name: 'OrderEdit', params: { id: item.id }}" label="Detail"></q-btn>
                 </div>
               </td>
             </tr>

@@ -28,6 +28,14 @@ const submit = () => {
   store.dispatch('layanan/store', form)
 }
 
+const selectProduct = (val) => {
+  let p = master_data.value.find(h => h.id == val)
+
+  if(p) {
+    form.sell_price = p.price
+  }
+}
+
 </script>
 
 <template>
@@ -47,7 +55,7 @@ const submit = () => {
         <div class="col q-pa-sm">
           <div class="card-box block-container">
             <div class="q-gutter-y-md">
-              <q-select filled v-model="form.layanan_id" :options="masterOptions" label="Select Services" map-options emit-value></q-select>
+              <q-select filled v-model="form.layanan_id" :options="masterOptions" label="Select Services" map-options emit-value @update:modelValue="selectProduct"></q-select>
               <money-formatter v-model="form.sell_price" label="Sell Price"/>
             </div>
           <div class="submit-block">
