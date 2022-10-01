@@ -64,10 +64,10 @@ module.exports = configure(function (ctx) {
       env: {
         MAIN_API: ctx.dev
           ? 'http://localhost:8000/api/branch/'
-          : 'http://lb.diginet.website/api/branch/',
+          : 'http://lb.lautanberlianku.co.id/branch/',
         BASE_API: ctx.dev
           ? 'http://localhost:8000/api/'
-          : 'http://lb.diginet.website/api/'
+          : 'http://lb.lautanberlianku.co.id/'
       },
 
       // Options below are automatically set depending on the env, set them if you want to override
