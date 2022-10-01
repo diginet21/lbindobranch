@@ -79,12 +79,20 @@ const submit = () => {
         <div class="col q-pa-sm">
           <div class="card-box block-container">
             <div class="q-gutter-y-md">
-              <q-select filled v-model="form.sparepart_id" :options="masterOptions" label="Select Sparepart" map-options emit-value></q-select>
-              <money-formatter v-model="form.sell_price" label="Sell Price"/>
+              <q-select filled v-model="form.sparepart_id" :options="masterOptions" label="Select Sparepart" map-options emit-value>
+                 <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey">
+                      No results
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
+              <money-formatter filled v-model="form.sell_price" label="Sell Price"/>
             </div>
           <div class="submit-block">
-            <q-btn :disable="loading" label="Cancel" color="primary" flat :to="{ name: 'PartIndex' }"></q-btn>
             <q-btn :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
+            <q-btn :disable="loading" label="Cancel" color="primary" outline :to="{ name: 'PartIndex' }"></q-btn>
           </div>
         </div>
         </div>

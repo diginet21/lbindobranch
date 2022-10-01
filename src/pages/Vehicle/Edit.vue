@@ -74,28 +74,35 @@ const dpType = ['Percent', 'Amount']
         <div class="col q-pa-sm">
           <div class="card-box">
             <div class="q-gutter-y-md">
-              <q-select filled required label="Select Vehicle" v-model="form.vehicle_id" :options="masterOptions" map-options emit-value></q-select>
-                <money-formatter v-model="form.sell_price" />
+              <q-select outlined required label="Select Vehicle" v-model="form.vehicle_id" :options="masterOptions" map-options emit-value>
+                 <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey">
+                      No results
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
+                <money-formatter outlined v-model="form.sell_price" />
               <div class="row q-gutter-sm">
                 <div class="col">
-                  <q-select filled required label="Down Payment Type" v-model="form.dp_type" :options="dpType" map-options emit-value></q-select>
+                  <q-select outlined required label="Down Payment Type" v-model="form.dp_type" :options="dpType" map-options emit-value></q-select>
                 </div>
                  <div class="col">
-                  <money-formatter required v-if="form.dp_type == 'Amount'" v-model="form.dp_amount" label="Down Payment Amount"/>
-                  <q-input v-else filled required v-model="form.dp_amount" label="Down Payment Amount" mask="###"></q-input>
+                  <money-formatter outlined required v-if="form.dp_type == 'Amount'" v-model="form.dp_amount" label="Down Payment Amount"/>
+                  <q-input v-else outlined required v-model="form.dp_amount" label="Down Payment Amount" mask="###"></q-input>
                 </div>
               </div>
+            </div>
+
+            <div class="submit-block">
+              <q-btn padding="6px 24px" :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
+              <q-btn padding="6px 24px" :disable="loading" label="Cancel" class="bg-white" color="primary" outline to="/vehicles"></q-btn>
             </div>
           </div>
 
         </div>
       </div>
-      <q-footer class="flex q-px-lg q-py-md bg-grey-1 justify-end" dark reveal>
-        <div class="q-gutter-x-md">
-          <q-btn padding="6px 24px" :disable="loading" label="Cancel" class="bg-white" color="primary" outline to="/vehicles"></q-btn>
-          <q-btn padding="6px 24px" :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
-        </div>
-      </q-footer>
     </q-form>
   </q-page>
 </template>

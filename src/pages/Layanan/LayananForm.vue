@@ -55,12 +55,20 @@ const selectProduct = (val) => {
         <div class="col q-pa-sm">
           <div class="card-box block-container">
             <div class="q-gutter-y-md">
-              <q-select filled v-model="form.layanan_id" :options="masterOptions" label="Select Services" map-options emit-value @update:modelValue="selectProduct"></q-select>
-              <money-formatter v-model="form.sell_price" label="Sell Price"/>
+              <q-select filled v-model="form.layanan_id" :options="masterOptions" label="Select Services" map-options emit-value @update:modelValue="selectProduct">
+                 <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey">
+                      No results
+                    </q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
+              <money-formatter filled v-model="form.sell_price" label="Sell Price"/>
             </div>
           <div class="submit-block">
-            <q-btn :disable="loading" label="Cancel" color="primary" flat :to="{ name: 'LayananIndex' }"></q-btn>
             <q-btn :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
+            <q-btn :disable="loading" label="Cancel" color="primary" outline :to="{ name: 'LayananIndex' }"></q-btn>
           </div>
         </div>
         </div>

@@ -40,8 +40,6 @@ h1,h2,h3,h4,h5,h6 {
   max-width: 640px;
 }
 .card-title {
-  display: flex;
-  align-items: center;
   padding-bottom: .8rem;
   h2 {
     font-size: 1.4rem;
@@ -196,25 +194,27 @@ table.table.striped {
   }
 }
 .form-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   // margin-bottom: 40px;
-  @media(max-width:800px) {
-    flex-direction: column;
-    .card-sm {
-      width: 100%;
-      max-width:800px;
+  &.flex-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    
+    @media(max-width:800px) {
+  
+      flex-direction: column;
+      .card-sm {
+        width: 100%;
+        max-width:800px;
+      }
+      // margin-bottom: 120px;
     }
-    // margin-bottom: 120px;
   }
 }
 .submit-block {
   margin-top: 2rem;
-  display: flex;
-  justify-content: flex-end;
-  button {
-    margin-left: .6rem;
+  > *:not(:first-child) {
+    margin-left: .6rem
   }
   @media(max-width:800px) {
     background-color: #fff;

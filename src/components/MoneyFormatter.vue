@@ -1,6 +1,12 @@
 <template>
   <div>
-    <q-input v-model="price" :filled="filled" :label="label" @update:model-value="updateData" prefix="Rp"></q-input>
+    <q-input 
+    v-model="price" 
+    :outlined="outlined" 
+    :filled="filled" 
+    :label="label" 
+    @update:model-value="updateData" 
+    prefix="Rp"></q-input>
   </div>
 </template>
 
@@ -12,6 +18,7 @@ export default {
       default: 'Price'
     },
     filled: Boolean,
+    outlined: Boolean,
     modelValue: [String, Number],
   },
   emits: ['update:modelValue'],

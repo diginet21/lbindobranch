@@ -38,7 +38,7 @@ export default {
         <div class="card-title">
           <h2>Login</h2>
           <div class="desc">Silahkan login untuk akses aplikasi</div>
-        <div class="text-red text-xs q-pt-xs" v-if="errors"> {{ errors.email[0] }}</div>
+          <div class="text-red text-xs q-pt-xs" v-if="errors"> {{ errors.email[0] }}</div>
         </div>
         <q-form @submit.prevent="submit" class="">
             <div class="q-gutter-y-md">
