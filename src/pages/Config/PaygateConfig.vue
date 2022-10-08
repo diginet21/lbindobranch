@@ -94,11 +94,11 @@ const updatedata = () => {
             </div>
           </div>
         </div>
-        <q-footer class="q-pa-md bg-white">
+        <div class="q-pa-md bg-white">
           <div class="flex justify-end">
-            <q-btn :loading="loading" label="Update Data" type="submit" color="primary" unelevated></q-btn>
+            <q-btn :loading="loading" label="Submit" type="submit" color="primary" unelevated></q-btn>
           </div>
-        </q-footer>
+        </div>
       </q-form>
     </div>
   </q-page>

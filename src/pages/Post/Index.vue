@@ -74,7 +74,7 @@ const deleteItem = (item) => {
               </td>
             </tr>
              <tr v-if="!posts.available">
-              <td colspan="4" >
+              <td colspan="5" >
                 <div class="text-center q-pa-xs">No data found</div></td>
             </tr>
           </tbody>

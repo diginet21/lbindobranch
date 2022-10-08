@@ -268,7 +268,7 @@ const userModal = ref(false)
       
       <div class="card-column q-pa-md">
         <div class="card-title">
-          <h2>Invoices ( {{ order.payments.length }} )</h2>
+          <h2>Invoices</h2>
         </div>
         <div v-for="payment in order.payments" :key="payment.id" class="q-mb-md">
           <div class="q-pa-xs">

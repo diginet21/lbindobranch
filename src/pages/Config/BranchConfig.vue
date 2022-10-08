@@ -51,7 +51,9 @@ const form = reactive({
   phone: "",
   email: "",
   address: "",
-  warehouse: ""
+  warehouse: "",
+  latitude: '',
+  longitude: ''
 });
 
 const setData = (branch) => {
@@ -61,6 +63,8 @@ const setData = (branch) => {
   form.email = branch.email;
   form.address = branch.address;
   form.warehouse = branch.warehouse;
+  form.latitude = branch.latitude ?? '';
+  form.longitude = branch.longitude ?? '';
 
   warehouseString.value =  `${form.warehouse.subdistrict_name} ${form.warehouse.type}  ${form.warehouse.city} - ${form.warehouse.province}`
 };
@@ -133,6 +137,13 @@ const selectSubdistrict = (item) => {
       <q-form @submit.prevent="submit" class="q-gutter-y-md">
         <q-input filled v-model="form.name" label="Name"></q-input>
         <q-input filled v-model="form.phone" label="Phone"></q-input>
+        <div>
+          <div class="text-label text-grey-8">Coordinate</div>
+          <div class="row q-gutter-x-sm">
+            <q-input filled class="col" label="Latitude" v-model="form.latitude"></q-input>
+            <q-input filled class="col" label="Longitude" v-model="form.longitude"></q-input>
+          </div>
+        </div>
         <q-input filled v-model="form.email" label="Email"></q-input>
         <q-input
           filled
@@ -166,12 +177,6 @@ const selectSubdistrict = (item) => {
         </div>
 
         <div class="flex justify-end q-gutter-x-sm q-mt-lg">
-          <q-btn
-            label="Cancel"
-            outline
-            color="primary"
-            :to="{ name: 'BranchIndex' }"
-          ></q-btn>
           <q-btn
             label="Submit"
             type="submit"

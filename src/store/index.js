@@ -45,7 +45,7 @@ export default store(function (/* { ssrContext } */) {
       getSite: ({ commit }) => {
         BaseApi().get('sites-setting').then((response) => {
           if(response.status == 200) {
-            commit('SET_SETTING', response.data.data)
+            commit('SET_SETTING', response.data.results)
           }
          })
       },

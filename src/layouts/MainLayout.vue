@@ -12,7 +12,10 @@
         />
 
         <q-toolbar-title>
-          <img :src="sites.logo_src" v-if="sites && sites.logo" height="40">
+          <template v-if="sites">
+          <img :src="sites.logo_src" v-if="sites.logo" height="40">
+          <span v-else>{{ sites.sitename }}</span>
+          </template>
           <span v-else>Lautan Berlian</span>
         </q-toolbar-title>
         <q-space></q-space>
