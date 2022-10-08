@@ -2,7 +2,8 @@
 <script>
 import { reactive, computed } from 'vue'
 import { useStore } from 'vuex'
-import { Api } from 'boot/axios'
+import { BaseApi } from 'boot/axios'
+import Cookies from 'js-cookie'
 
 export default {
 
@@ -16,12 +17,14 @@ export default {
     const loading = computed(() => store.state.loading)
     const errors = computed(() => store.state.errors)
     
-    const submit = () => {
-        Api().post('auth/requestPasswordToken', form).then(response => {
-          if(response.status == 200) {
-            console.log(response.data);
-          }
-        })
+     const submit = () => {
+      store.commit('CLEAR_ERROR')
+      BaseApi().post('auth/requestPasswordToken', form).then(response => {
+        if(response.status == 200) {
+          Cookies.set('__isreqpwd', 1)
+          router.push({ name: 'ResetPassword'})
+        }
+      })
     };
 
     return {
