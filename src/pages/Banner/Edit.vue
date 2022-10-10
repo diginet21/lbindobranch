@@ -93,12 +93,8 @@ const bannerTypeOptions = ['Front', 'Post'];
             <q-input outlined v-model="form.title" label="Label"></q-input>
 
             <div class="q-mt-md">
-
-              <div class="flex justify-between">
-                <q-checkbox v-model="form.is_external_url" label="External Link?"></q-checkbox>
-              </div>
               <q-input outlined v-model="form.url_path" label="Path / Url"></q-input>
-              <div class="text-xs text-grey-7">Gunakan absolute url jika eksternal link. eg: "https://google.com" </div>
+              <div class="text-xs text-grey-7 q-pa-xs">Gunakan absolute url jika eksternal link. eg: "https://google.com" </div>
 
             </div>
 
@@ -122,9 +118,9 @@ const bannerTypeOptions = ['Front', 'Post'];
                 </div>
               </div>
   
-              <div class="flex justify-end q-mt-md q-gutter-md">
-                <q-btn :disable="loading" label="Cancel" color="primary" flat :to="{ name: 'BannerIndex' }"></q-btn>
+              <div class="submit-block">
                 <q-btn :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
+                <q-btn :disable="loading" label="Cancel" color="primary" outline :to="{ name: 'BannerIndex' }"></q-btn>
               </div>
           </div>
         </div>

@@ -12,7 +12,8 @@ const form = reactive({
   start_at: '',
   end_at: '',
   image: '',
-  map: ''
+  map: '',
+  whatsapp_contact: ''
 })
 
 const loading = computed(() => store.state.loading)
@@ -65,7 +66,7 @@ const handleUploadImage = () => {
            <div class="card-box">
             <div class="q-gutter-y-md">
               <q-input outlined v-model="form.title" label="Title"></q-input>
-
+              <q-input outlined v-model="form.whatsapp_contact" label="Contact Whatsapp"></q-input>
               <div class="q-mt-md">
                 <div class="input-label">Start At</div>
                 <q-input outlined v-model="form.start_at">
@@ -126,10 +127,6 @@ const handleUploadImage = () => {
                 </div>
                 <q-editor v-model="form.description"></q-editor>
               </div>
-              <div class="flex justify-end q-mt-md q-gutter-md">
-                <q-btn :disable="loading" label="Cancel" color="primary" flat :to="{ name: 'EventIndex' }"></q-btn>
-                <q-btn :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
-              </div>
           </div>
         </div>
         </div>
@@ -159,6 +156,10 @@ const handleUploadImage = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div class="submit-block q-px-md q-mb-xl">
+        <q-btn :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
+        <q-btn :disable="loading" label="Cancel" color="primary" outline :to="{ name: 'EventIndex' }"></q-btn>
       </div>
     </q-form>
   </q-page>

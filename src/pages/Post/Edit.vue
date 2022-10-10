@@ -118,8 +118,8 @@ const handleUploadImage = () => {
               </div>
             </div>
             <div class="submit-block">
-              <q-btn :disable="loading" label="Cancel" color="primary" flat :to="{ name: 'PostIndex' }"></q-btn>
               <q-btn :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>
+              <q-btn :disable="loading" label="Cancel" color="primary" outline :to="{ name: 'PostIndex' }"></q-btn>
             </div>
         </div>
         </div>
