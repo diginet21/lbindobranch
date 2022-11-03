@@ -13,7 +13,8 @@ const form = reactive({
   end_at: '',
   image: '',
   map: '',
-  whatsapp_contact: ''
+  whatsapp_contact: '',
+  category: ''
 })
 
 const loading = computed(() => store.state.loading)
@@ -46,6 +47,8 @@ const handleUploadImage = () => {
   document.getElementById('inputFile').click()
 }
 
+const category = ['Event', 'Promotion', 'Career']
+
 </script>
 
 <template>
@@ -66,6 +69,7 @@ const handleUploadImage = () => {
            <div class="card-box">
             <div class="q-gutter-y-md">
               <q-input outlined v-model="form.title" label="Title"></q-input>
+              <q-select outlined v-model="form.category" :options="category" label="Category"></q-select>
               <q-input outlined v-model="form.whatsapp_contact" label="Contact Whatsapp"></q-input>
               <div class="q-mt-md">
                 <div class="input-label">Start At</div>

@@ -167,7 +167,7 @@ const orderStatus = computed(() => store.state.order.order_status)
                 <div>{{ item.customer_phone }}</div>
               </td>
               <td>
-                <div class="text-uppercase">{{ item.order_type.split('_').join(' ') }}</div>
+                <div>{{ item.type_label }}</div>
               </td>
               <td>{{ item.order_status }}</td>
               <td>

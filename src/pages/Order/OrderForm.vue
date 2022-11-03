@@ -157,6 +157,7 @@ const userModal = ref(false)
       </q-breadcrumbs>
     </div>
     <div class="flex justify-end q-gutter-x-sm">
+      <q-btn :to="{ name: 'OrderIndex' }" color="grey-8" size="13px" label="Back"></q-btn>
       <q-btn @click="handleProcessOrder" color="blue" size="13px" label="Process Order"></q-btn>
       <q-btn @click="handleInputResi" color="purple" size="13px" label="Input Resi"></q-btn>
       <q-btn @click="handleAbortOrder" color="red" size="13px" label="Cancel Order"></q-btn>
@@ -200,7 +201,7 @@ const userModal = ref(false)
           </q-item>
           <q-item>
             <q-item-section>Type</q-item-section>
-            <q-item-section class="text-uppercase">{{ order.order_type.split('_').join(' ') }}</q-item-section>
+            <q-item-section>{{ order.type_label }}</q-item-section>
           </q-item>
           <q-item>
             <q-item-section>Status</q-item-section>
@@ -249,7 +250,7 @@ const userModal = ref(false)
         <div class="card-title justify-between">
           <h2>Customer Info</h2>
         </div>
-        <div class="q-gutter-y-sm">
+        <div class="q-gutter-y-sm q-px-md">
           <q-input label="Customer Name" v-model="form.customer_name"></q-input>
           <q-input label="Customer Email" v-model="form.customer_email"></q-input>
           <q-input label="Customer Phone " v-model="form.customer_phone"></q-input>
@@ -272,7 +273,7 @@ const userModal = ref(false)
         </div>
         <div v-for="payment in order.payments" :key="payment.id" class="q-mb-md">
           <div class="q-pa-xs">
-            <q-list separator bordered>
+            <q-list separator>
               <q-item>
                 <q-item-section>Reference</q-item-section>
                 <q-item-section>{{ payment.ref }}</q-item-section>

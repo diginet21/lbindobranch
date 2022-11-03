@@ -50,6 +50,7 @@ const deleteItem = (item) => {
               <th>Title</th>
               <th>Time</th>
               <th>Approved</th>
+              <th>Category</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -73,6 +74,7 @@ const deleteItem = (item) => {
                 </table>
               </td>
               <td>{{ item.is_active? 'Yes' : 'No' }}</td> 
+              <td>{{ item.category }}</td>
               <td>
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(item)"></q-btn>
