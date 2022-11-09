@@ -17,15 +17,7 @@ export function getOrders ({ commit }, payload = null) {
   
 }
 export function update({dispatch}, payload) {
-  Loading.show()
-  Api().post('orders/' + payload.id, payload).then(() => {
-    dispatch('getOrders')
-    Notify.create({
-      type: 'positive',
-      message: 'Order has been successfully updated',
-      position: 'top-right'
-    })
-  }).finally(() => Loading.hide())
+  return Api().post('orders/' + payload.id, payload)
 }
 export function process({dispatch}, id) {
  return Api().post('processOrder/' + id)

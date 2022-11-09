@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
-import { Dialog, Notify } from 'quasar'
+import { Dialog, Loading, Notify } from 'quasar'
 import { useRoute } from 'vue-router'
 import { Api } from 'boot/axios'
 
@@ -49,7 +49,7 @@ const form = reactive({
   additional_cost_amount: '',
   shipping_cost: '',
   additional_cost_description: '',
-  subtotal: 0
+  order_subtotal: 0
 })
 
 onMounted(() => getData())
@@ -84,8 +84,20 @@ const grandTotal = computed(() => {
 })
 
 const submit = () => {
+  Loading.show()
   store.dispatch('order/update', form)
+  .then(() => {
+    getData()
+    Notify.create({
+      type: 'positive',
+      message: 'Order has been successfully updated',
+      position: 'top-right'
+    })
+     store.dispatch('order/getOrders')
+  })
+  .finally(() => Loading.hide())
 }
+
 
 const statusOrdeOptions = computed(() => store.state.order.order_status_options)
 
@@ -111,15 +123,26 @@ const processOrder = () => {
   })
 }
 const handleAbortOrder = () => {
-   store.dispatch('order/abort', order.value.id).then(() => {
-    getData()
-    Notify.create({
-      type: 'positive',
-      message: 'Order has been successfully updated',
-      position: 'top-right'
-    })
-    store.dispatch('order/getOrders')
+   Dialog.create({
+    title: 'Konfirmasi Pembatalan',
+    message: 'Ini akan membatalkan order',
+    cancel: true
+  }).onOk(() => {
+    abortOrder()
   })
+}
+const abortOrder = () => {
+
+  store.dispatch('order/abort', order.value.id).then(() => {
+   getData()
+   Notify.create({
+     type: 'positive',
+     message: 'Order has been successfully updated',
+     position: 'top-right'
+   })
+   store.dispatch('order/getOrders')
+ })
+
 }
 const resiModal = ref(false)
 
@@ -156,11 +179,11 @@ const userModal = ref(false)
         <q-breadcrumbs-el label="Order" />
       </q-breadcrumbs>
     </div>
-    <div class="flex justify-end q-gutter-x-sm">
+    <div class="flex justify-end q-gutter-x-sm" v-if="order">
       <q-btn :to="{ name: 'OrderIndex' }" color="grey-8" size="13px" label="Back"></q-btn>
       <q-btn @click="handleProcessOrder" color="blue" size="13px" label="Process Order"></q-btn>
       <q-btn @click="handleInputResi" color="purple" size="13px" label="Input Resi"></q-btn>
-      <q-btn @click="handleAbortOrder" color="red" size="13px" label="Cancel Order"></q-btn>
+      <q-btn v-if="order.order_status == 'PENDING' || order.order_status == 'UNPAID'" @click="handleAbortOrder" color="red" size="13px" label="Cancel Order"></q-btn>
     </div>
     <div v-if="order">
        <div class="card-column q-pa-md">
@@ -200,12 +223,20 @@ const userModal = ref(false)
             <q-item-section>{{ order.invoice_id }}</q-item-section>
           </q-item>
           <q-item>
+            <q-item-section>Payment Type</q-item-section>
+            <q-item-section>{{ order.is_cash_payment ? 'CASH' : 'KREDIT' }}</q-item-section>
+          </q-item>
+          <q-item>
             <q-item-section>Type</q-item-section>
             <q-item-section>{{ order.type_label }}</q-item-section>
           </q-item>
           <q-item>
             <q-item-section>Status</q-item-section>
-            <q-item-section>{{ order.order_status }}</q-item-section>
+            <q-item-section>
+              <q-item-label>
+                <q-badge>{{ order.order_status }}</q-badge>
+              </q-item-label>
+            </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>Subtotal</q-item-section>
@@ -216,16 +247,19 @@ const userModal = ref(false)
             <q-item-section>{{ form.order_discount }}</q-item-section>
           </q-item>
           <q-item>
-            <q-item-section>Shipping Cost</q-item-section>
-            <q-item-section>IDR {{ $money(form.shipping_cost) }}</q-item-section>
+            <q-item-section>
+              <q-item-label>Additional Cost</q-item-label>
+              <q-item-label v-if="order.additional_cost_description" caption>{{ order.additional_cost_description }}</q-item-label>
+            </q-item-section>
+            <q-item-section>IDR {{ order.additional_cost_amount ?  $money(order.additional_cost_amount) : 0 }}</q-item-section>
           </q-item>
           <q-item>
             <q-item-section>Tax Total</q-item-section>
-            <q-item-section>IDR {{ ppnTotal }}</q-item-section>
+            <q-item-section>IDR {{ $money(order.tax_total) }}</q-item-section>
           </q-item>
           <q-item>
             <q-item-section>Order Total</q-item-section>
-            <q-item-section>IDR {{ $money(grandTotal) }}</q-item-section>
+            <q-item-section>IDR {{ $money(order.order_total) }}</q-item-section>
           </q-item>
         </q-list>
         <q-dialog v-model="orderModal">
@@ -254,10 +288,10 @@ const userModal = ref(false)
           <q-input label="Customer Name" v-model="form.customer_name"></q-input>
           <q-input label="Customer Email" v-model="form.customer_email"></q-input>
           <q-input label="Customer Phone " v-model="form.customer_phone"></q-input>
-          <q-input type="textarea" label="Customer Address" v-model="form.customer_address"></q-input>
+          <q-input type="textarea" label="Customer Address" rows="3" v-model="form.customer_address"></q-input>
         </div>
       </div>
-      <!-- <div class="card-column q-pa-md">
+      <div class="card-column q-pa-md">
         <div class="card-title">
           <h2>Additional Cost</h2>
         </div>
@@ -265,42 +299,46 @@ const userModal = ref(false)
            <money-formatter v-model="additional_cost_helper" label="Additional Cost Amount"/>
           <q-input label="Additional Cost Description" v-model="form.additional_cost_description"></q-input>
         </div>
-      </div> -->
+      </div>
       
       <div class="card-column q-pa-md">
         <div class="card-title">
           <h2>Invoices</h2>
         </div>
-        <div v-for="payment in order.payments" :key="payment.id" class="q-mb-md">
-          <div class="q-pa-xs">
-            <q-list separator>
-              <q-item>
-                <q-item-section>Reference</q-item-section>
-                <q-item-section>{{ payment.ref }}</q-item-section>
-              </q-item>
-              <q-item>
-                <q-item-section>Method</q-item-section>
-                <q-item-section>{{ payment.method.split('_').join(' ') }} - {{ payment.name }}</q-item-section>
-              </q-item>
-              <q-item>
-                <q-item-section>Type</q-item-section>
-                <q-item-section>{{ payment.payment_type }} </q-item-section>
-              </q-item>
-              <q-item>
-                <q-item-section>Status</q-item-section>
-                <q-item-section>{{ payment.status }}</q-item-section>
-              </q-item>
-              <q-item>
-                <q-item-section>Customer Fee</q-item-section>
-                <q-item-section>IDR {{ $money(payment.payment_fee) }}</q-item-section>
-              </q-item>
-              <q-item>
-                <q-item-section>Total Amount</q-item-section>
-                <q-item-section>IDR {{ $money(payment.amount) }}</q-item-section>
-              </q-item>
-            </q-list>
-          </div>
-        </div>
+        <div class="table-responsive">
+        <table class="table striped">
+          <thead>
+           <tr>
+            <th>Reference</th>
+            <th>Payment Method</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Customer Fee</th>
+            <th>Total Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr v-for="payment in order.payments" :key="payment.id">
+              <td>
+               {{ payment.ref }}
+              </td>
+              <td>
+                {{ payment.method.split('_').join(' ') }} - {{ payment.name }}
+              </td>
+              <td>{{ payment.payment_type }}</td>
+              <td> 
+                <q-badge>{{ payment.status }}</q-badge>
+              </td>
+              <td>
+                IDR {{ $money(payment.payment_fee) }}
+              </td>
+              <td>
+                IDR {{ $money(payment.amount) }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       </div>
     </div>
     <div class="q-gutter-x-sm flex justify-end q-pa-lg">

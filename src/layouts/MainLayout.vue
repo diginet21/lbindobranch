@@ -47,27 +47,11 @@
       bordered
       v-model="leftDrawerOpen"
       show-if-above
-      :width="280"
+      :width="250"
       :breakpoint="800"
       :dark="drawerIsDark" 
       >
         <q-scroll-area style="height: 100%;">
-          <!-- <q-img class="relative" src="~assets/lautan-berlian.jpg" :ratio="9/6">
-            <div class="absolute-bottom bg-transparent">
-              <q-avatar size="56px" class="q-mb-sm">
-                <img src="~assets/boy-avatar.png">
-              </q-avatar>
-              <div class="text-weight-bold">admin</div>
-              <div>admin@example.com</div>
-            </div>
-          </q-img> -->
-          <!-- <q-list class="text-center bg-white" separator>
-            <q-item>
-              <img :src="sites.logo_src" v-if="sites && sites.logo" style="width:90%;">
-              <span v-else>Lautan Berlian</span>
-            </q-item>
-          </q-list> -->
-           <!-- <q-separator spaced /> -->
           <q-list :dark="drawerIsDark" class="q-pb-xl">
             <q-item class="q-pl-none">
               <q-item-section>

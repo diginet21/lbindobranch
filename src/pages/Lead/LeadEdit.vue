@@ -89,9 +89,9 @@ const submit = () => {
           </q-input> -->
           <q-input required filled type="textarea" v-model="form.description" label="Description"></q-input>
         </div>
-        <div class="q-mt-md flex justify-end q-gutter-x-md">
+        <div class="q-mt-md flex justify-end q-gutter-x-sm">
           <q-btn label="Cancel" type="button" color="primary" outline :to="{ name: 'LeadIndex' }"></q-btn>
-          <q-btn label="Submit" type="submit" color="primary"></q-btn>
+          <q-btn label="Update" type="submit" color="primary"></q-btn>
         </div>
       </q-form>
     </div>
