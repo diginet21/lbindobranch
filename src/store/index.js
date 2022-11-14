@@ -37,7 +37,17 @@ export default store(function (/* { ssrContext } */) {
       loading: false,
       drawer: true,
       site_setting: null,
-      branch: null,
+      branch: {
+        id: "",
+        name: "",
+        phone: "",
+        email: "",
+        address: "",
+        warehouse: "",
+        latitude: '',
+        longitude: '',
+        social_media: []
+      },
       cities: [],
       paginate_loading: false
     },
@@ -87,10 +97,20 @@ export default store(function (/* { ssrContext } */) {
         state.site_setting = payload
       },
       SET_BRANCH: ( state, payload) => {
+
         state.branch = payload
+        // console.log(payload);
+        // for(let key in payload) {
+        //   console.log('key', key);
+        //   console.log('val', payload[key]);
+        //   state.branch[key] = payload[key]
+        // }
       },
       SET_PAGINATE_LOADING: (state, status) => {
         state.paginate_loading = status
+      },
+      SET_BRANCH_VALUE: (state, payload) => {
+        state.branch[payload.key] = payload.value
       }
     },
     modules: {

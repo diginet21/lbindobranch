@@ -94,9 +94,9 @@ const updatedata = () => {
             </div>
           </div>
         </div>
-        <div class="q-pa-md bg-white">
-          <div class="flex justify-end">
-            <q-btn :loading="loading" label="Submit" type="submit" color="primary" unelevated></q-btn>
+        <div class="q-my-lg">
+          <div class="">
+            <q-btn :loading="loading" label="Update Data" type="submit" color="primary" unelevated></q-btn>
           </div>
         </div>
       </q-form>
