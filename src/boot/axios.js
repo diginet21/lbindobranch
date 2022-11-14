@@ -33,13 +33,11 @@ export default boot(({ app, store }) => {
    baseApi.interceptors.response.use(response => {
     return response
   }, error => {
-    console.log('from boot');
   
     if (error.response) {
 
         // Session Expired
         if (401 === error.response.status) {
-          console.log('from boot unauthorized');
             store.dispatch('user/exit')
 
             Notify.create({
@@ -53,6 +51,7 @@ export default boot(({ app, store }) => {
             // errors = error.response.data.message
             store.commit('SET_ERROR', error.response.data.errors)
         }
+  
   
     } else {
 

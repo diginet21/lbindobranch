@@ -63,7 +63,7 @@ const paginateData = () => {
             <th>Title</th>
             <th>Default Price</th>
             <th>Sell Price</th>
-            <th>Down Payment</th>
+            <th>Booking Fee</th>
             <th>Action</th>
           </tr>
           </thead>
@@ -77,7 +77,7 @@ const paginateData = () => {
               <td>{{ $moneyIdr(item.default_price) }}</td>
               <td>{{ $moneyIdr(item.sell_price) }}</td>
               <td>
-                <div>{{ item.dp_type == 'Percent' ? item.dp_amount +'%' : $moneyIdr(item.dp_amount) }}</div>
+                <div>{{ item.booking_type == 'Percent' ? item.booking_amount +'%' : $moneyIdr(item.booking_amount) }}</div>
               </td>
               <td>
                 <div class="q-gutter-sm">

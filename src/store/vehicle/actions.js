@@ -1,4 +1,5 @@
 import { Api } from 'boot/axios'
+import { Notify } from 'quasar'
 
 export function store ({dispatch, commit}, payload) {
   commit('SET_LOADING', true, { root: true })
@@ -11,6 +12,12 @@ export function store ({dispatch, commit}, payload) {
     }
   })
   .finally(() => commit('SET_LOADING', false, { root: true }))
+  .catch((err) => {
+    Notify.create({
+      type: 'negative',
+      message: err.response.data.error
+    })
+  })
 }
 export function update ({dispatch, commit}, payload) {
   console.log(payload);
@@ -20,9 +27,17 @@ export function update ({dispatch, commit}, payload) {
     if(response.status == 200) {
       dispatch('getIndex')
       this.$router.push({name: 'Vehicles'})
+    }else {
+      alert('yayayaya')
     }
   })
   .finally(() => commit('SET_LOADING', false, { root: true }))
+  .catch((err) => {
+    Notify.create({
+      type: 'negative',
+      message: err.response.data.error
+    })
+  })
 }
 export function getIndex ({commit}) {
    Api().get('/vehicles').then(response => {

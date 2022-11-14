@@ -23,8 +23,9 @@ const form = reactive({
   _method: 'PUT',
   vehicle_id: '',
   sell_price: '',
-  dp_type: '',
-  dp_amount: ''
+  booking_type: '',
+  booking_amount: '',
+  down_payments: []
 })
 
 const getData = () => {
@@ -36,13 +37,16 @@ const getData = () => {
 
       form.id = data.id
       form.vehicle_id = data.vehicle_id
-      form.dp_type = data.dp_type
+      form.booking_type = data.booking_type
       form.sell_price = data.sell_price
-      form.dp_amount = data.dp_amount
+      form.booking_amount = data.booking_amount
+      form.down_payments = data.down_payments.length ? data.down_payments.map(el => el) : [{ dp_type: 'Amount', dp_amount: '' }]
 
       let item = { value: data.vehicle_id, label: data.vehicle.title + ' ' + toMoney(data.vehicle.price) }
       masterOptions.value = [...options.value]
       masterOptions.value.push(item)
+
+      console.log(form);
 
     }
   })
@@ -55,6 +59,17 @@ const submit = () => {
   store.dispatch('vehicle/update', form)
 }
 const dpType = ['Percent', 'Amount']
+
+const handleAddDp = () => {
+
+  form.down_payments.push({ dp_type: 'Amount', dp_amount: '' })
+
+}
+
+const removeDp = (index) => {
+  form.down_payments.splice(index, 1)
+}
+
 </script>
 
 <template>
@@ -83,17 +98,42 @@ const dpType = ['Percent', 'Amount']
                   </q-item>
                 </template>
               </q-select>
-                <money-formatter outlined v-model="form.sell_price" />
+                <money-formatter label="Sell Price" outlined v-model="form.sell_price" />
               <div class="row q-gutter-sm">
                 <div class="col">
-                  <q-select outlined required label="Down Payment Type" v-model="form.dp_type" :options="dpType" map-options emit-value></q-select>
+                  <q-select outlined required label="Booking Fee Type" v-model="form.booking_type" :options="dpType" map-options emit-value></q-select>
                 </div>
                  <div class="col">
-                  <money-formatter outlined required v-if="form.dp_type == 'Amount'" v-model="form.dp_amount" label="Down Payment Amount"/>
-                  <q-input v-else outlined required v-model="form.dp_amount" label="Down Payment Amount" mask="###"></q-input>
+                  <money-formatter outlined required v-if="form.booking_type == 'Amount'" v-model="form.booking_amount" label="Booking Fee Amount"/>
+                  <q-input v-else outlined required v-model="form.booking_amount" label="Booking Fee Amount" mask="###"></q-input>
                 </div>
               </div>
             </div>
+
+             <div class="q-mt-xl" style="min-height:200px;">
+                <div class="flex justify-between items-center q-mb-md">
+                  <div class="text-md">Down Payments</div>
+                    <q-btn label="Add Down Payment Field" color="primary" size="12px" @click="handleAddDp"></q-btn>
+                </div>
+                <div>
+                  <q-list>
+                    <q-item v-for="(item, index) in form.down_payments" :key="index">
+                      <q-item-section>
+                        <q-select outlined required label="DP Type" v-model="form.down_payments[index].dp_type" :options="dpType" map-options emit-value></q-select>
+                      </q-item-section>
+                      <q-item-section class="col">
+                        <money-formatter v-if="form.down_payments[index].dp_type == 'Amount'" outlined required v-model="form.down_payments[index].dp_amount" label="DP Amount"/>
+                        <q-input v-else outlined required v-model="form.down_payments[index].dp_amount" label="DP Amount" mask="##"></q-input>
+                      </q-item-section>
+                       <q-item-section side>
+                        <q-btn v-if="form.down_payments.length > 1" icon="delete" round @click="removeDp(index)" color="red" unelevated size="sm"></q-btn>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+
+                  <div class="text-center q-pt-lg" v-if="!form.down_payments.length">Tidak ada data</div>
+                </div>
+              </div>
 
             <div class="submit-block">
               <q-btn padding="6px 24px" :loading="loading" type="submit" label="Submit" color="primary" unelevated></q-btn>

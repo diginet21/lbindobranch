@@ -6,6 +6,7 @@
     :filled="filled" 
     :label="label" 
     @update:model-value="updateData" 
+    :required="required"
     prefix="Rp"></q-input>
   </div>
 </template>
@@ -19,6 +20,7 @@ export default {
     },
     filled: Boolean,
     outlined: Boolean,
+    required: Boolean,
     modelValue: [String, Number],
   },
   emits: ['update:modelValue'],
