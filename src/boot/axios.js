@@ -72,7 +72,7 @@ export default boot(({ app, store }) => {
     if(branch) {
       // config.params = {...config.params, branch: branch }
       // config.headers = {...config.headers, Branch_Id: branch.id }
-      config.headers['Branch-Id'] = branch.id ;
+      config.headers['X-Branch-Id'] = branch.id ;
     }
     return config
   

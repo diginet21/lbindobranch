@@ -19,7 +19,7 @@ onBeforeMount(() => {
     store.dispatch("getCities");
   }
   if(!branch.value) {
-    Api().get('getCurrentBranch').then(response => {
+    Api().get('getMyBranch').then(response => {
       if(response.status == 200) {
         store.commit('SET_BRANCH', response.data.data)
         setData(response.data.data)

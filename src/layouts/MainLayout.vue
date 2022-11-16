@@ -155,7 +155,6 @@ export default defineComponent({
         isDark.value = localStorage.getItem('drawer_isdark') == 'true' ? true : false
       }
       store.dispatch('lead/getNewLeadCount')
-      // store.dispatch('getCurrentBranch')
 
     })
 

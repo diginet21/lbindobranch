@@ -8,7 +8,6 @@ export function login({commit, dispatch}, payload) {
     if(response.status == 200) {
       commit('SET_LOGIN', response.data.results)
       commit('SET_BRANCH', response.data.results.branch, { root: true })
-      // dispatch('getCurrentBranch', null, { root: true })
       this.$router.push({name: 'Dashboard'})
     }
   })

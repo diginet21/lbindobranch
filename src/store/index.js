@@ -19,7 +19,6 @@ import order from './order'
 import banner from './banner'
 import layanan from './layanan'
 import config from './config'
-import state from './user/state';
 
 /*
  * If not building with SSR mode, you can
@@ -66,8 +65,8 @@ export default store(function (/* { ssrContext } */) {
           }
          })
       },
-     getCurrentBranch({ commit }) {
-       Api().get('getCurrentBranch').then(response => {
+      getMyBranch({ commit }) {
+       Api().get('getMyBranch').then(response => {
           if(response.status == 200) {
             commit('SET_BRANCH', response.data.data)
           }
@@ -97,14 +96,7 @@ export default store(function (/* { ssrContext } */) {
         state.site_setting = payload
       },
       SET_BRANCH: ( state, payload) => {
-
         state.branch = payload
-        // console.log(payload);
-        // for(let key in payload) {
-        //   console.log('key', key);
-        //   console.log('val', payload[key]);
-        //   state.branch[key] = payload[key]
-        // }
       },
       SET_PAGINATE_LOADING: (state, status) => {
         state.paginate_loading = status

@@ -41,7 +41,7 @@
     get() {
       let main_url = branch.value.main_url
       if(branch.value) {
-        main_url += `?branch=${branch.value.slug}`
+        main_url += `?bid=${branch.value.id}`
       }
   
       return main_url;
@@ -52,12 +52,7 @@
   })
   const callbackUrl = computed({
     get() {
-      let main_url = branch.value.main_url
-      if(branch.value) {
-        main_url += `/api/tripay/callback?bid=${branch.value.id}`
-      }
-  
-      return main_url;
+      return branch.value.tripay_callback
     },
     set(val) {
       console.log(val);
