@@ -188,7 +188,7 @@ const reset = () => {
               <th>Phone</th>
               <th>Type</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th align="right">Actions</th>
             </tr>
           </thead>
           <tbody v-if="main_data.ready">
@@ -201,7 +201,7 @@ const reset = () => {
               <td>
                 <q-badge :color="item.status ? item.status.color : 'orange'">{{ item.status? item.status.label : 'New' }}</q-badge>
               </td>
-              <td>
+              <td align="right">
                 <div class="q-gutter-sm">
                   <!-- <q-btn round icon="view_list" size="sm" color="blue" unelevated @click="selectLead(item)"></q-btn> -->
                   <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'LeadEdit', params: { id: item.id } }"></q-btn>

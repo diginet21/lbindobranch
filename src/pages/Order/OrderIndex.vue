@@ -30,7 +30,7 @@ const loading = computed(() => store.state.loading)
 
 const formFilter = reactive({
   branch_id: '',
-  limit: 5,
+  limit: 10,
   start: '',
   end: '',
   status: ''
@@ -110,7 +110,7 @@ const orderStatus = computed(() => store.state.order.order_status)
             square
             dense
             label="Showing"
-          :options="[5,10,20,50,100]"
+          :options="[10,20,50,100]"
           v-model="formFilter.limit">
           </q-select>
         </div>
@@ -153,7 +153,7 @@ const orderStatus = computed(() => store.state.order.order_status)
             <th>Customer</th>
             <th>Type</th>
             <th>Status</th>
-            <th>Action</th>
+            <th align="right">Action</th>
           </tr>
           </thead>
           <tbody v-if="main_data.ready">
@@ -170,7 +170,7 @@ const orderStatus = computed(() => store.state.order.order_status)
                 <div>{{ item.type_label }}</div>
               </td>
               <td>{{ item.order_status }}</td>
-              <td>
+              <td align="right">
                 <div class="q-gutter-sm">
                   <q-btn size="sm" color="blue" unelevated :to="{ name: 'OrderEdit', params: { id: item.id }}" label="Detail"></q-btn>
                 </div>

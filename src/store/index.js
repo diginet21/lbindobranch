@@ -48,7 +48,18 @@ export default store(function (/* { ssrContext } */) {
         social_media: []
       },
       cities: [],
-      paginate_loading: false
+      paginate_loading: false,
+      payment_chanels: []
+    },
+    getters: {
+      paymentChanelsOptions: (state) => {
+        if(state.payment_chanels.length) {
+          return [{ value: '', label: 'Pilih' }, 
+          ...state.payment_chanels.map(el => ({ value: el.code, label: el.name }))
+          ]
+        }
+        return [{value: '', label: 'Pilih' }]
+      }
     },
     actions: {
       getSite: ({ commit }) => {
@@ -69,6 +80,13 @@ export default store(function (/* { ssrContext } */) {
        Api().get('getMyBranch').then(response => {
           if(response.status == 200) {
             commit('SET_BRANCH', response.data.data)
+          }
+        })
+      },
+      getPaymentChanels( { commit }) {
+        BaseApi().get('frontend/tripay/payment-chanels').then(response => {
+          if(response.status == 200) {
+            commit('SET_PAYMENT_CHANELS', response.data.data)
           }
         })
       }
@@ -103,7 +121,11 @@ export default store(function (/* { ssrContext } */) {
       },
       SET_BRANCH_VALUE: (state, payload) => {
         state.branch[payload.key] = payload.value
-      }
+      },
+      SET_PAYMENT_CHANELS: (state, payload) => {
+        state.payment_chanels = payload
+      },
+      
     },
     modules: {
       user,

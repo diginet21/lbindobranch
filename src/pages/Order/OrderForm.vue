@@ -17,6 +17,9 @@ const getData = () => {
   })
 }
 
+const paymentChanelsOptions = computed(() => store.getters['paymentChanelsOptions'])
+const branch = computed(() => store.state.branch)
+
 const invoiceNumber = ref('')
 
 const setData = (order) => {
@@ -52,16 +55,10 @@ const form = reactive({
   order_subtotal: 0
 })
 
-onMounted(() => getData())
-
-const additional_cost_helper = computed({
-  get() {
-    return form.additional_cost_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  },
-  set(val) {
-    if(val) {
-      form.additional_cost_amount = val.split('.').join('')
-    }
+onMounted(() => {
+  getData()
+  if(!paymentChanelsOptions.value.length < 2) {
+    store.dispatch('getPaymentChanels')
   }
 })
 
@@ -124,8 +121,8 @@ const processOrder = () => {
 }
 const handleAbortOrder = () => {
    Dialog.create({
-    title: 'Konfirmasi Pembatalan',
-    message: 'Ini akan membatalkan order',
+    title: 'Konfirmasi',
+    message: 'Konfirmasi Pembatalan Pesanan',
     cancel: true
   }).onOk(() => {
     abortOrder()
@@ -165,9 +162,135 @@ const submitResi = () => {
 }
 const orderModal = ref(false)
 const userModal = ref(false)
+const invoiceModal = ref(false)
+
+const handleCreateInvoice = () => {
+  clearForm()
+  formInvoice.order_id = order.value.id
+  formInvoice.branch_id = branch.value.id
+  formInvoice.amount = maxTotalAmount.value
+  invoiceModal.value = true
+}
+
+const maxTotalAmount = computed(() => {
+  let totalAmount = parseInt(order.value.order_total) 
+  return order.value.payments_sum_amount ? totalAmount - parseInt(order.value.payments_sum_amount) : totalAmount
+})
+
+const formInvoice = reactive({
+  order_id: '',
+  branch_id: '',
+  amount: '',
+  payment_code: ''
+})
+const invoice_amount_helper = computed({
+  get() {
+    return formInvoice.amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  },
+  set(val) {
+    if(val) {
+      formInvoice.amount = val.split('.').join('')
+    }
+  }
+})
+
+const errorMaxTotalAmount = computed(() => {
+  if(formInvoice.amount > maxTotalAmount.value) {
+    return true
+  }
+  return false
+})
+
+
+const formAddItem = reactive({
+  order_id: '',
+  branch_id: '',
+  product_price: '',
+  product_name: '',
+  note: '',
+  quantity: 1,
+  product_sku: '123'
+})
+
+const add_item_helper = computed({
+  get() {
+    return formAddItem.product_price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  },
+  set(val) {
+    if(val) {
+      formAddItem.product_price = val.split('.').join('')
+    }
+  }
+})
+
+
+const clearForm = () => {
+  formInvoice.order_id = ''
+  formInvoice.branch_id = ''
+  formInvoice.amount = ''
+  formInvoice.payment_code = ''
+  invoiceModal.value = false
+
+  formAddItem.order_id = ''
+  formAddItem.branch_id = ''
+  formAddItem.product_price = ''
+  formAddItem.product_name = ''
+  formAddItem.note = ''
+  formAddItem.quantity = 1
+  formAddItem.product_sku = '123'
+  addItemModal.value = false
+}
+
+const submitInvoice =() => {
+  if(errorMaxTotalAmount.value == true) return
+  if(!formInvoice.payment_code) {
+    Notify.create({
+      type: 'negative',
+      message: 'Metode pembayaran belum dipilih'
+    })
+    return
+  }
+  store.dispatch('order/createInvoice', formInvoice).then((res) => {
+    getData()
+  }).finally(() => invoiceModal.value = false)
+
+}
+
+const addItemModal = ref(false)
+
+const handleAddItem = () => {
+  clearForm()
+  formAddItem.order_id = order.value.id
+  formAddItem.branch_id = branch.value.id
+  addItemModal.value = true
+}
+
+const submitAddItem = () => {
+  store.dispatch('order/addOrderItem', formAddItem).then((res) => {
+    getData()
+  }).finally(() => addItemModal.value = false)
+}
+
+const removeItem = (item) => {
+  Dialog.create({
+    title: 'Confirm',
+    message: 'Konfirmasi pemghapusan item',
+    cancel: true
+  }).onOk(() => {
+    store.dispatch('order/removeOrderItem', item.id).then(() => {
+      getData()
+    })
+  })
+}
+
+const canCreateInvoice = computed(() => {
+  if(order.value.order_total > order.value.payments_sum_amount) {
+    return true
+  }
+  return false
+})
 
 </script>
-
 <template>
   <q-page padding>
     <div class="q-py-sm">
@@ -181,40 +304,16 @@ const userModal = ref(false)
     </div>
     <div class="flex justify-end q-gutter-x-sm" v-if="order">
       <q-btn :to="{ name: 'OrderIndex' }" color="grey-8" size="13px" label="Back"></q-btn>
+      <q-btn v-if="order.order_status == 'PENDING'" @click="handleAddItem" color="pink" size="13px" label="Additional Item"></q-btn>
+      <q-btn :disable="!canCreateInvoice" @click="handleCreateInvoice" color="teal" size="13px" label="Generate Invoice"></q-btn>
       <q-btn @click="handleProcessOrder" color="blue" size="13px" label="Process Order"></q-btn>
-      <q-btn @click="handleInputResi" color="purple" size="13px" label="Input Resi"></q-btn>
+      <q-btn v-if="order.shipping_courier_name" @click="handleInputResi" color="purple" size="13px" label="Input Resi"></q-btn>
       <q-btn v-if="order.order_status == 'PENDING' || order.order_status == 'UNPAID'" @click="handleAbortOrder" color="red" size="13px" label="Cancel Order"></q-btn>
     </div>
     <div v-if="order">
-       <div class="card-column q-pa-md">
-        <div class="card-title">
-          <h2>Products</h2>
-        </div>
-        <table class="table striped">
-            <thead>
-            <tr>
-              <th>Description</th>
-              <th>Qty</th>
-              <th>Price</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in order.items" :key="item.id">
-              <td>
-                {{ item.product_name }}
-              </td>
-              <td>{{ item.quantity }}</td>
-              <td>IDR {{ $money(item.product_price) }}</td>
-              <td>IDR {{ $money(item.product_price*item.quantity) }}</td>
-            </tr>
-            
-          </tbody>
-        </table>
-      </div> 
       <div class="card-column q-pa-md">
         <div class="card-title justify-between">
-          <h2>Order Info</h2>
+          <h2>Order Detail</h2>
           <!-- <q-btn label="Edit" @click="orderModal = true"></q-btn> -->
         </div>
         <q-list separator>
@@ -246,13 +345,13 @@ const userModal = ref(false)
             <q-item-section>Discount</q-item-section>
             <q-item-section>{{ form.order_discount }}</q-item-section>
           </q-item>
-          <q-item>
+          <!-- <q-item>
             <q-item-section>
               <q-item-label>Additional Cost</q-item-label>
               <q-item-label v-if="order.additional_cost_description" caption>{{ order.additional_cost_description }}</q-item-label>
             </q-item-section>
             <q-item-section>IDR {{ order.additional_cost_amount ?  $money(order.additional_cost_amount) : 0 }}</q-item-section>
-          </q-item>
+          </q-item> -->
           <q-item>
             <q-item-section>Tax Total</q-item-section>
             <q-item-section>IDR {{ $money(order.tax_total) }}</q-item-section>
@@ -279,29 +378,41 @@ const userModal = ref(false)
           </q-card>
         </q-dialog>
       </div>
-     
-      <div class="card-column q-pa-md">
-        <div class="card-title justify-between">
-          <h2>Customer Info</h2>
-        </div>
-        <div class="q-gutter-y-sm q-px-md">
-          <q-input label="Customer Name" v-model="form.customer_name"></q-input>
-          <q-input label="Customer Email" v-model="form.customer_email"></q-input>
-          <q-input label="Customer Phone " v-model="form.customer_phone"></q-input>
-          <q-input type="textarea" label="Customer Address" rows="3" v-model="form.customer_address"></q-input>
-        </div>
-      </div>
-      <div class="card-column q-pa-md">
+
+       <div class="card-column q-pa-md">
         <div class="card-title">
-          <h2>Additional Cost</h2>
+          <h2>Order Items</h2>
         </div>
-        <div class="q-gutter-y-sm">
-           <money-formatter v-model="additional_cost_helper" label="Additional Cost Amount"/>
-          <q-input label="Additional Cost Description" v-model="form.additional_cost_description"></q-input>
-        </div>
-      </div>
-      
-      <div class="card-column q-pa-md">
+        <table class="table striped">
+            <thead>
+            <tr>
+              <th>Description</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Note</th>
+              <th></th>
+              <th align="right">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in order.items" :key="item.id">
+              <td>
+                {{ item.product_name }}
+              </td>
+              <td>{{ item.quantity }}</td>
+              <td>IDR {{ $money(item.product_price) }}</td>
+              <td><p>{{ item.note }}</p></td>
+              <td>
+                <q-btn label="remove" padding="1px 5px" no-caps dense color="red" size="11px" outline v-if="order.order_status == 'PENDING' && item.is_additional == 1" @click="removeItem(item)"></q-btn>
+              </td>
+              <td align="right">IDR {{ $money(item.product_price*item.quantity) }}</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div> 
+
+       <div class="card-column q-pa-md">
         <div class="card-title">
           <h2>Invoices</h2>
         </div>
@@ -314,7 +425,7 @@ const userModal = ref(false)
             <th>Type</th>
             <th>Status</th>
             <th>Customer Fee</th>
-            <th>Total Amount</th>
+            <th align="right">Total Amount</th>
           </tr>
           </thead>
           <tbody>
@@ -332,14 +443,40 @@ const userModal = ref(false)
               <td>
                 IDR {{ $money(payment.payment_fee) }}
               </td>
-              <td>
+              <td align="right">
                 IDR {{ $money(payment.amount) }}
               </td>
+            </tr>
+            <tr v-if="!order.payments.length">
+              <td colspan="6" class="text-center">No data available</td>
             </tr>
           </tbody>
         </table>
       </div>
       </div>
+     
+      <div class="card-column q-pa-md">
+        <div class="card-title justify-between">
+          <h2>Customer Info</h2>
+        </div>
+        <div class="q-gutter-y-sm q-px-md">
+          <q-input label="Customer Name" v-model="form.customer_name"></q-input>
+          <q-input label="Customer Email" v-model="form.customer_email"></q-input>
+          <q-input label="Customer Phone " v-model="form.customer_phone"></q-input>
+          <q-input type="textarea" label="Customer Address" rows="3" v-model="form.customer_address"></q-input>
+        </div>
+      </div>
+      <!-- <div class="card-column q-pa-md">
+        <div class="card-title">
+          <h2>Additional Cost</h2>
+        </div>
+        <div class="q-gutter-y-sm">
+           <money-formatter v-model="additional_cost_helper" label="Additional Cost Amount"/>
+          <q-input label="Additional Cost Description" v-model="form.additional_cost_description"></q-input>
+        </div>
+      </div> -->
+      
+     
     </div>
     <div class="q-gutter-x-sm flex justify-end q-pa-lg">
       <q-btn label="Back" color="primary" outline :to="{ name: 'OrderIndex' }"></q-btn>
@@ -354,6 +491,42 @@ const userModal = ref(false)
             <div class="q-mt-md q-gutter-x-sm flex justify-end">
               <q-btn outline color="primary" label="Cancel" v-close-popup></q-btn>
               <q-btn unelavated color="primary" type="submit" label="Submit"></q-btn>
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="invoiceModal" persistent>
+      <q-card class="card-lg">
+        <div class="card-header text-md">Generate Invoice</div>
+        <q-separator></q-separator>
+        <q-card-section>
+          <q-form @submit.prevent="submitInvoice">
+             <money-formatter required v-model="invoice_amount_helper" label="Amount"/>
+             <div class="text-red text-xs q-pa-xs" v-if="errorMaxTotalAmount">Maximal {{ $moneyIdr(maxTotalAmount) }}</div>
+            <q-select required label="Payment Method" v-model="formInvoice.payment_code" :options="paymentChanelsOptions" map-options emit-value></q-select>
+            <q-input v-model="formInvoice.note" label="Description" type="textarea"></q-input>
+            <div class="q-mt-md q-gutter-x-sm">
+              <q-btn label="Submit" type="submit" color="primary" unelevated></q-btn>
+              <q-btn label="Cancel"  color="primary" outline v-close-popup></q-btn>
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="addItemModal" persistent>
+      <q-card class="card-lg">
+        <div class="card-header text-md">Additional Item</div>
+        <q-separator></q-separator>
+        <q-card-section>
+          <q-form @submit.prevent="submitAddItem">
+            <q-input min="0" required v-model="formAddItem.product_name" label="Name"></q-input>
+             <money-formatter required v-model="add_item_helper" label="Amount"/>
+            <q-input min="0" required v-model="formAddItem.quantity" label="Quantity"></q-input>
+            <q-input v-model="formAddItem.note" label="Description" type="textarea"></q-input>
+            <div class="q-mt-md q-gutter-x-sm">
+              <q-btn label="Submit" type="submit" color="primary" unelevated></q-btn>
+              <q-btn label="Cancel"  color="primary" outline v-close-popup></q-btn>
             </div>
           </q-form>
         </q-card-section>

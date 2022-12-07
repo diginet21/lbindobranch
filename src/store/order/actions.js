@@ -28,6 +28,15 @@ export function abort({dispatch}, id) {
 export function inputResi({dispatch}, payload) {
   return Api().post('inputResi', payload)
 }
+export function createInvoice({dispatch}, payload) {
+  return Api().post('createInvoice', payload)
+}
+export function addOrderItem({dispatch}, payload) {
+  return Api().post('addOrderItem', payload)
+}
+export function removeOrderItem({dispatch}, id) {
+  return Api().post('removeOrderItem/' + id)
+}
 export function filterData ({ commit }, payload) {
   commit('SET_LOADING', true, { root: true })
   let url = 'orders'

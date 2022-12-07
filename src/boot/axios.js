@@ -30,7 +30,7 @@ export default boot(({ app, store }) => {
   //       so you can easily perform requests against your app's API
 
    // Add a response interceptor
-   baseApi.interceptors.response.use(response => {
+  baseApi.interceptors.response.use(response => {
     return response
   }, error => {
   
@@ -65,6 +65,19 @@ export default boot(({ app, store }) => {
     return Promise.reject(error)
   })
 
+  baseApi.interceptors.request.use((config) => {
+
+    let branch = store.state.branch
+    
+    if(branch) {
+      config.headers['X-Branch-Id'] = branch.id ;
+    }
+    return config
+  
+  }, function (error) {
+    return Promise.reject(error);
+  })
+
   mainApi.interceptors.request.use((config) => {
 
     let branch = store.state.branch
@@ -79,6 +92,7 @@ export default boot(({ app, store }) => {
   }, function (error) {
     return Promise.reject(error);
   })
+  
 
   mainApi.interceptors.response.use(response => {
     return response

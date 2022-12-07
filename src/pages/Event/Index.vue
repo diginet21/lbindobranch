@@ -51,7 +51,7 @@ const deleteItem = (item) => {
               <th>Time</th>
               <th>Approved</th>
               <th>Category</th>
-              <th>Action</th>
+              <th align="right">Action</th>
             </tr>
           </thead>
           <tbody v-if="events.ready">
@@ -75,7 +75,7 @@ const deleteItem = (item) => {
               </td>
               <td>{{ item.is_active? 'Yes' : 'No' }}</td> 
               <td>{{ item.category }}</td>
-              <td>
+              <td align="right">
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(item)"></q-btn>
                   <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'EventEdit', params: { id: item.id }}"></q-btn>

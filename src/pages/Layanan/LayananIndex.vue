@@ -58,7 +58,7 @@ const paginateData = () => {
             <th>Title</th>
             <th>Default Price</th>
             <th>Sell Price</th>
-            <th>Action</th>
+            <th align="right">Action</th>
           </tr>
           </thead>
           <tbody v-if="main_data.ready">
@@ -67,7 +67,7 @@ const paginateData = () => {
               <td>{{ item.title }}</td>
               <td>{{ $moneyIdr(item.default_price) }}</td>
               <td>{{ $moneyIdr(item.sell_price) }}</td>
-              <td>
+              <td align="right">
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(item)"></q-btn>
                   <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'LayananEdit', params: { id: item.id }}"></q-btn>

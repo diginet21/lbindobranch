@@ -50,7 +50,7 @@ const deleteItem = (item) => {
               <th>Title</th>
               <th>Type</th>
               <th>Approved</th>
-              <th>Action</th>
+              <th align="right">Action</th>
             </tr>
           </thead>
           <tbody v-if="banners.ready">
@@ -62,7 +62,7 @@ const deleteItem = (item) => {
               <td align="left">{{ banner.title }}</td>
               <td align="left">{{ banner.banner_type }}</td>
               <td>{{ banner.is_active ? 'Yes' : 'No' }}</td>
-              <td>
+              <td align="right">
                 <div class="q-gutter-sm">
                   <q-btn round icon="delete" size="sm" color="red" unelevated @click="deleteItem(banner)"></q-btn>
                   <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'BannerEdit', params: { id: banner.id }}"></q-btn>

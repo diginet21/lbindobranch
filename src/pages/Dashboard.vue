@@ -136,7 +136,7 @@
                 <th>Customer</th>
                 <th>Total</th>
                 <th>Type</th>
-                <th>Status</th>
+                <th align="right">Status</th>
               </tr>
               </thead>
               <tbody v-if="currentOrder.length">
@@ -153,7 +153,7 @@
                   <td>
                     <div class="text-uppercase">{{ item.order_type.split('_')[0] }}</div>
                   </td>
-                  <td>{{ item.order_status }}</td>
+                  <td align="right">{{ item.order_status }}</td>
                 </tr>
                 <tr v-if="!orders.available">
                   <td colspan="6" >
@@ -179,7 +179,7 @@
                   <th>Phone</th>
                   <th>Type</th>
                   <th>Status</th>
-                  <th>Actions</th>
+                  <th align="right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -191,7 +191,7 @@
                   <td>
                     <q-badge color="teal">{{ item.status? item.status.label : 'New' }}</q-badge>
                   </td>
-                  <td>
+                  <td align="right">
                     <div class="q-gutter-sm">
                       <!-- <q-btn round icon="view_list" size="sm" color="blue" unelevated @click="selectLead(item)"></q-btn> -->
                       <q-btn round icon="edit" size="sm" color="blue" unelevated :to="{ name: 'LeadEdit', params: { id: item.id } }"></q-btn>
