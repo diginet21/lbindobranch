@@ -1,7 +1,6 @@
 
-export function SET_EVENT (state, payload) {
-  state.events.data = payload.data
-  state.events.available = payload.data.length > 0
-  state.events.ready = true
+export function SET_EVENT(state, payload) {
+   state.events = { ...payload.data }
+   state.events.ready = true
 }
 

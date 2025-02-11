@@ -284,7 +284,7 @@ const removeItem = (item) => {
 }
 
 const canCreateInvoice = computed(() => {
-  if(order.value.order_total > order.value.payments_sum_amount) {
+  if(order.value.order_total > order.value.payments_sum_amount && order.value.order_status == 'PENDING') {
     return true
   }
   return false
@@ -320,6 +320,10 @@ const canCreateInvoice = computed(() => {
           <q-item>
             <q-item-section>INVOICE</q-item-section>
             <q-item-section>{{ order.invoice_id }}</q-item-section>
+          </q-item>
+          <q-item v-if="order.schedule_at">
+            <q-item-section>Action Schedule</q-item-section>
+            <q-item-section>{{ order.schedule }}</q-item-section>
           </q-item>
           <q-item>
             <q-item-section>Payment Type</q-item-section>
